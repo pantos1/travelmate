@@ -8,7 +8,8 @@ class Plan extends Component {
     }
 
     _renderItem = ({item}) => {
-        return <PlanElement data={item}/>
+        // console.log(item);
+        return <PlanElement name={item.key} price={item.price} duration={item.duration}/>
     };
 
     render() {
@@ -35,7 +36,7 @@ class Plan extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {flex: 1, alignItems: "center", paddingTop: 20},
+    container: {flex: 1, alignItems: "center", paddingTop: 20, width: "100%"},
     rowContainer: {flex: 1, flexDirection: "row"},
     columnContainer: {flex: 1, flexDirection: "column"},
     planTitle: {fontSize: 20},

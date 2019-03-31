@@ -6,14 +6,12 @@ class PlanElement extends Component {
         super(props);
     }
 
-    _renderItem = data => {
-        return <Text>{data.item. key}</Text>
-    };
-
     render() {
         return (
-            <View>
-                <FlatList style={styles.listElementContainer} data={this.props.data} renderItem={this._renderItem}/>
+            <View style={styles.listElementContainer}>
+                <Text>{this.props.name}</Text>
+                <Text>{this.props.price}</Text>
+                <Text>{this.props.duration}</Text>
             </View>
         )
     }

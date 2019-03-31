@@ -10,21 +10,19 @@ export default class App extends React.Component {
                 organizer={"Jan Kowalski"}
                 startTime={"9:00"}
                 duration={"7h"}
-                sights={[
-                    {
-                        key: "Borobudur",
-                        data: [
-                            {key: "Borobudur"},
-                            {key: "200k IND"},
-                            {key: "2h"},
-                        ]
-
-                    }
-                ]}
+                sights={mockPlan}
             />
         );
     }
 }
+
+const mockPlan = [
+    {
+        key: "Borobudur",
+        price: "200k IND",
+        duration: "2h",
+    }
+];
 
 const styles = StyleSheet.create({
     container: {
