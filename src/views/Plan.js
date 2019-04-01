@@ -29,7 +29,7 @@ class Plan extends Component {
                         {this.props.duration}
                     </Text>
                 </View>
-                <FlatList data={this.props.sights} renderItem={this._renderItem} />
+                <FlatList data={this.props.sights} renderItem={this._renderItem}/>
             </View>
         )
     }

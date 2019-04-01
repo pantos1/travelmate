@@ -19,7 +19,7 @@ class PlanElement extends Component {
 }
 
 const styles = StyleSheet.create({
-  listElementContainer: {flex: 1, flexDirection: "row"}
+    listElementContainer: {flex: 1, flexDirection: "row"}
 });
 
 export default PlanElement;
