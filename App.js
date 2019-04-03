@@ -8,21 +8,37 @@
 
 import React, {Component} from 'react';
 import Plan from './src/views/Plan';
-import firebase from 'react-native-firebase';
+import * as firebase from 'react-native-firebase';
 
 type Props = {};
 export default class App extends Component<Props> {
 
     constructor(props) {
         super(props);
-        firebase.auth()
-            .signInAnonymously()
-            .then(credential => {
-                if (credential) {
-                    console.log('default app user ->', credential.user.toJSON());
-                }
-            });
+        this.plans = firebase.firestore().collection('trips');
+        this.state = {
+            trips: []
+        };
     }
+
+    componentDidMount() {
+        this.unsubscribe = this.plans.onSnapshot(this.onCollectionUpdate)
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+    onCollectionUpdate = (querySnapshot) => {
+        const trips = [];
+        querySnapshot.forEach((doc) => {
+            trips.push({
+                key: doc.id,
+                ...doc
+            })
+        });
+        this.setState(trips);
+    };
 
     render() {
         return (

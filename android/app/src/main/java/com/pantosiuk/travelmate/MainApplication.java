@@ -1,4 +1,4 @@
-package com.travelmate;
+package com.pantosiuk.travelmate;
 
 import android.app.Application;
 
