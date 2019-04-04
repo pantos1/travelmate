@@ -7,48 +7,40 @@
  */
 
 import React, {Component} from 'react';
-import Plan from './src/views/Plan';
 import * as firebase from 'react-native-firebase';
+import PlanList from "./src/views/PlanList";
+import {Text} from "react-native";
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.plans = firebase.firestore().collection('trips');
+        this.ref = firebase.firestore().collection('trips');
         this.state = {
             trips: []
         };
     }
 
-    componentDidMount() {
-        this.unsubscribe = this.plans.onSnapshot(this.onCollectionUpdate)
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
-    onCollectionUpdate = (querySnapshot) => {
-        const trips = [];
-        querySnapshot.forEach((doc) => {
-            trips.push({
-                key: doc.id,
-                ...doc
-            })
+    _addKeys = trips => {
+        return trips.map(trip => {
+            return Object.assign(trip, { key: trip.id });
         });
-        this.setState(trips);
+    };
+
+    componentDidMount() {
+        // this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)
+        this.ref.get()
+            .then(trips => {
+                this.setState({trips: this._addKeys(trips.docs)});
+            })
+            .catch(error => {
+                console.log('Fetch failed: ', error);
+            });
     };
 
     render() {
         return (
-            <Plan
-                planTitle={"Borobudur"}
-                organizer={"Jan Kowalski"}
-                startTime={"9:00"}
-                duration={"7h"}
-                sights={mockPlan}
-            />
+            <PlanList trips={this.state.trips} />
         )
     }
 }
