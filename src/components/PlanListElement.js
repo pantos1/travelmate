@@ -1,6 +1,5 @@
 import React, {Component} from "react";
-import {ListItem, Body, Right, Button} from "native-base";
-import {Text} from "react-native";
+import {ListItem, Body, Right, Button, Text} from "native-base";
 
 class PlanListElement extends Component {
     constructor(props) {
@@ -15,7 +14,7 @@ class PlanListElement extends Component {
                         {this.props.name}
                     </Text>
                     <Text note numberOfLines={1}>
-                        {this.props.organizer} {this.props.date}
+                        {this.props.owner} {this.props.date.toLocaleDateString()}
                     </Text>
                 </Body>
                 <Right>
