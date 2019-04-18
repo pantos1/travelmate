@@ -8,7 +8,7 @@ class PlanListElement extends Component {
 
     render() {
         return(
-            <ListItem>
+            <ListItem button onPress={() => this.props.handleClick() }>
                 <Body>
                     <Text>
                         {this.props.name}
@@ -17,11 +17,6 @@ class PlanListElement extends Component {
                         {this.props.owner} {this.props.date.toLocaleDateString()}
                     </Text>
                 </Body>
-                <Right>
-                    <Button transparent>
-                        <Text>Details</Text>
-                    </Button>
-                </Right>
             </ListItem>
         )
     }

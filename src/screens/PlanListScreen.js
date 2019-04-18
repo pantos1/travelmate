@@ -3,24 +3,32 @@ import {FlatList} from "react-native";
 import {Container, Body, Title, Header, Left, Footer, FooterTab, Button, Text, Icon} from "native-base";
 import PlanListElement from "../components/PlanListElement";
 
-class PlanList extends Component {
+class PlanListScreen extends Component {
     constructor(props) {
         super(props);
     }
 
+    static navigationOptions = {
+      title: "Trips around you"
+    };
+
+    _handleClick = (plan) => {
+      this.props.navigation.navigate("Plan", { plan });
+    };
+
     _renderItem = ({item}) => {
-        return <PlanListElement name={item.name} owner={item.owner} date={item.date}/>
+        return <PlanListElement name={item.name} owner={item.owner} date={item.date} handleClick={this._handleClick(item)}/>
     };
 
     render() {
         return (
             <Container>
-                <Header>
-                    <Left/>
-                    <Body>
-                        <Title>Trips around you</Title>
-                    </Body>
-                </Header>
+                {/*<Header>*/}
+                {/*    <Left/>*/}
+                {/*    <Body>*/}
+                {/*        <Title>Trips around you</Title>*/}
+                {/*    </Body>*/}
+                {/*</Header>*/}
                 <Container>
                     <FlatList data={this.props.trips} renderItem={this._renderItem}/>
                 </Container>
@@ -45,4 +53,4 @@ class PlanList extends Component {
     }
 }
 
-export default PlanList;
+export default PlanListScreen;

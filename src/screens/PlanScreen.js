@@ -2,11 +2,18 @@ import React, {Component} from "react";
 import {StyleSheet, Text, View, FlatList} from "react-native";
 import {Container, Header, Left, Body, Button, Icon, Title} from 'native-base';
 import PlanElement from '../components/PlanElement';
+import { PlanScreenHeader } from '../components/PlanScreenHeader'
 
 class Plan extends Component {
     constructor(props) {
         super(props);
     }
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: <PlanScreenHeader title={navigation.state.params.plan.title}/>
+        }
+    };
 
     _renderItem = ({item}) => {
         return <PlanElement name={item.key} price={item.price} duration={item.duration}/>
@@ -15,28 +22,18 @@ class Plan extends Component {
     render() {
         return (
             <Container>
-                <Header>
-                    <Left>
-                        <Button transparent>
-                            <Icon name='arrow-back'/>
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>{this.props.planTitle}</Title>
-                    </Body>
-                </Header>
                 <View style={[styles.header]}>
                     <Text style={styles.mainText}>
-                        by {this.props.organizer}
+                        by {this.props.navigation.state.params.plan.organizer}
                     </Text>
                     <View style={styles.rowContainer}>
                         <Text style={[styles.mainText]}>
-                            Start {this.props.startTime} {this.props.duration}
+                            Start {this.props.navigation.state.params.plan.startTime} {this.props.navigation.state.params.plan.duration}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.body}>
-                    <FlatList data={this.props.sights} renderItem={this._renderItem}/>
+                    <FlatList data={this.props.navigation.state.params.plan.sights} renderItem={this._renderItem}/>
                 </View>
             </Container>
         )
