@@ -8,7 +8,7 @@ class PlanListElement extends Component {
 
     render() {
         return(
-            <ListItem button onPress={() => this.props.handleClick() }>
+            <ListItem button onPress={this.props.onClick}>
                 <Body>
                     <Text>
                         {this.props.name}

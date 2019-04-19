@@ -2,35 +2,33 @@ import React, {Component} from "react";
 import {FlatList} from "react-native";
 import {Container, Body, Title, Header, Left, Footer, FooterTab, Button, Text, Icon} from "native-base";
 import PlanListElement from "../components/PlanListElement";
+import {mockPlans} from "../data/mockPlans";
+import {NavigationActions} from "react-navigation";
 
 class PlanListScreen extends Component {
     constructor(props) {
         super(props);
     }
 
-    static navigationOptions = {
-      title: "Trips around you"
-    };
-
     _handleClick = (plan) => {
-      this.props.navigation.navigate("Plan", { plan });
+      this.props.navigation.navigate("Plan", { key: plan.key });
     };
 
     _renderItem = ({item}) => {
-        return <PlanListElement name={item.name} owner={item.owner} date={item.date} handleClick={this._handleClick(item)}/>
+        return <PlanListElement name={item.name} owner={item.owner} date={item.date} onClick={() => this._handleClick(item)}/>
     };
 
     render() {
         return (
             <Container>
-                {/*<Header>*/}
-                {/*    <Left/>*/}
-                {/*    <Body>*/}
-                {/*        <Title>Trips around you</Title>*/}
-                {/*    </Body>*/}
-                {/*</Header>*/}
+                <Header>
+                    <Left/>
+                    <Body>
+                        <Title>Trips around you</Title>
+                    </Body>
+                </Header>
                 <Container>
-                    <FlatList data={this.props.trips} renderItem={this._renderItem}/>
+                    <FlatList data={mockPlans} renderItem={this._renderItem}/>
                 </Container>
                 <Footer>
                     <FooterTab>

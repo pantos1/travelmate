@@ -10,9 +10,8 @@ import React, {Component} from 'react';
 import * as firebase from 'react-native-firebase';
 import PlanListScreen from "./src/screens/PlanListScreen";
 import {Text} from "react-native";
-import { createAppContainer, createStackNavigator } from "react-navigation";
+import {createAppContainer, createStackNavigator} from "react-navigation";
 import PlanScreen from "./src/screens/PlanScreen";
-import { mockPlans } from './src/data/mockPlans';
 
 // export default class App extends Component {
 //
@@ -47,9 +46,13 @@ import { mockPlans } from './src/data/mockPlans';
 //     }
 // }
 
-const appNavigator = createStackNavigator({
-    Home: { screen: PlanListScreen, navigationOptions: {mockPlans} },
-    Plan: { screen: PlanScreen }
-});
+const appNavigator = createStackNavigator(
+    {
+        Home: {screen: PlanListScreen},
+        Plan: {screen: PlanScreen}
+    },
+    {
+        headerMode: 'none'
+    });
 
 export default createAppContainer(appNavigator);
