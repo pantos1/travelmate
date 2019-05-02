@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import { Formik } from "formik";
-import { Body, Container, Header, Left, Title, Button, Form, Item, Input, Text, Content, Label} from "native-base";
+import { Body, Button, Container, Content, Form, Header, Input, Item, Label, Left, Text, Title } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
-import MapView from "react-native-maps";
+import * as Yup from "yup";
+
+const planValidationSchema = Yup.object().shape({
+    name: Yup.string().required("Please enter plan name"),
+    date: Yup.date().required("Please select trip's start date"),
+    latitude: Yup.number().required("Please select trip's start location"),
+    longitude: Yup.number().required("Please select trip's start location")
+});
+
 
 class PlanFormScreen extends Component {
     state = {
@@ -10,7 +18,7 @@ class PlanFormScreen extends Component {
     };
 
     toggleDateTimePicker = () => {
-      this.setState(state => this.state.dateTimePickerVisible = !state.dateTimePickerVisible);
+        this.setState(state => this.state.dateTimePickerVisible = !state.dateTimePickerVisible);
     };
 
     render() {
@@ -23,17 +31,28 @@ class PlanFormScreen extends Component {
                     </Body>
                 </Header>
                 <Formik
-                    initialValues={{name: ''}}
+                    initialValues={{
+                        name: '',
+                        date: ''
+                    }}
                     onSubmit={values => console.log(values)}
+                    validationSchema={planValidationSchema}
                 >
-                    {({handleSubmit, setFieldValue, values}) => (
+                    {({errors, handleBlur, handleChange, handleSubmit, setFieldValue, values}) => (
                         <Content>
                             <Form>
                                 <Item stackedLabel>
                                     <Label>
                                         Name
                                     </Label>
-                                    <Input />
+                                    <Input
+                                        onChangeText={handleChange('name')}
+                                        onBlur={handleBlur('name')}
+                                        value={values.name}
+                                    />
+                                    {errors.name &&
+                                    <Text style={{ fontSize: 10, color: 'red' }}>{errors.name}</Text>
+                                    }
                                 </Item>
                                 <Item onPress={this.toggleDateTimePicker} stackedLabel>
                                     <Label>
@@ -50,14 +69,28 @@ class PlanFormScreen extends Component {
                                         onConfirm={date => setFieldValue("date", date)}
                                         onCancel={this.toggleDateTimePicker}
                                     />
+                                    {errors.date &&
+                                    <Text style={{ fontSize: 10, color: 'red' }}>{errors.date}</Text>
+                                    }
                                 </Item>
-                                <Item stackedLabel onPress={() => this.props.navigation.navigate("Map")}>
+                                <Item stackedLabel
+                                      onPress={() => this.props.navigation.navigate(
+                                          "Map",
+                                          {
+                                              onLocationSelected: ({latitude, longitude}) => {
+                                                  setFieldValue("latitude", latitude);
+                                                  setFieldValue("longitude", longitude);
+                                              }
+                                          })}>
                                     <Label>
                                         Select start location
                                     </Label>
                                     <Input
                                         disabled={true}
                                     />
+                                    {errors.latitude &&
+                                    <Text style={{ fontSize: 10, color: 'red' }}>{errors.latitude}</Text>
+                                    }
                                 </Item>
                             </Form>
                             <Button onPress={handleSubmit} full>

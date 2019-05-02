@@ -1,8 +1,7 @@
-import MapView from 'react-native-maps'
+import MapView, { Marker } from 'react-native-maps'
 import React, { Component } from "react";
-import { StyleSheet, Platform, PermissionsAndroid, Dimensions } from "react-native";
-import { Container, Button, Text } from "native-base";
-import isEqual from 'lodash/isEqual';
+import { Dimensions, StyleSheet } from "react-native";
+import { Button, Container, Text } from "native-base";
 
 const GEOLOCATION_OPTIONS = {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000};
 
@@ -20,6 +19,10 @@ export default class MapScreen extends Component {
                 longitude: 0,
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
+            },
+            markerLocation: {
+                latitude: 0,
+                longitude: 0
             }
         }
     }
@@ -33,10 +36,13 @@ export default class MapScreen extends Component {
                         longitude: position.coords.longitude,
                         latitudeDelta: LATITUDE_DELTA,
                         longitudeDelta: LONGITUDE_DELTA
+                    },
+                    markerLocation: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
                     }
                 });
             },
-            (error) => console.log(error.message),
             GEOLOCATION_OPTIONS
         );
         this.watchID = navigator.geolocation.watchPosition(
@@ -47,6 +53,10 @@ export default class MapScreen extends Component {
                         longitude: position.coords.longitude,
                         latitudeDelta: LATITUDE_DELTA,
                         longitudeDelta: LONGITUDE_DELTA,
+                    },
+                    markerLocation: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
                     }
                 });
             }
@@ -63,11 +73,17 @@ export default class MapScreen extends Component {
                 <MapView
                     style={styles.map}
                     showsUserLocation={true}
+                    showsMyLocationButton={true}
                     region={this.state.region}
-                    // onRegionChange={region => this.setState({region})}
-                    // onRegionChangeComplete={region => this.setState({region})}
-                />
-                <Button full success>
+                >
+                    <Marker
+                        coordinate={this.state.markerLocation}
+                    />
+                </MapView>
+                <Button full success onPress={() => {
+                    this.props.navigation.state.params.onLocationSelected(this.state.markerLocation);
+                    this.props.navigation.goBack();
+                }}>
                     <Text>
                         Select start location
                     </Text>
