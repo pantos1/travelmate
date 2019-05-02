@@ -1,21 +1,16 @@
 import React, {Component} from "react";
 import {FlatList} from "react-native";
-import {Container, Body, Title, Header, Left, Footer, FooterTab, Button, Text, Icon} from "native-base";
+import {Container, Body, Title, Header, Left, Footer, FooterTab, Button, Text, Icon, Fab} from "native-base";
 import PlanListElement from "../components/PlanListElement";
 import {mockPlans} from "../data/mockPlans";
-import {NavigationActions} from "react-navigation";
 
 class PlanListScreen extends Component {
     constructor(props) {
         super(props);
     }
 
-    _handleClick = (plan) => {
-      this.props.navigation.navigate("Plan", { key: plan.key });
-    };
-
     _renderItem = ({item}) => {
-        return <PlanListElement name={item.name} owner={item.owner} date={item.date} onClick={() => this._handleClick(item)}/>
+        return <PlanListElement name={item.name} owner={item.owner} date={item.date} onClick={() => this.props.navigation.navigate("Plan", { key: item.key })}/>
     };
 
     render() {
@@ -29,6 +24,12 @@ class PlanListScreen extends Component {
                 </Header>
                 <Container>
                     <FlatList data={mockPlans} renderItem={this._renderItem}/>
+                    <Fab
+                        position="bottomRight"
+                        onPress={() => this.props.navigation.navigate("PlanForm")}
+                    >
+                        <Icon name="add" type="MaterialIcons" />
+                    </Fab>
                 </Container>
                 <Footer>
                     <FooterTab>

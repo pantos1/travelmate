@@ -1,17 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React, {Component} from 'react';
+import React from 'react';
 import * as firebase from 'react-native-firebase';
 import PlanListScreen from "./src/screens/PlanListScreen";
-import {Text} from "react-native";
 import {createAppContainer, createStackNavigator} from "react-navigation";
 import PlanScreen from "./src/screens/PlanScreen";
+import PlanFormScreen from "./src/screens/PlanFormScreen";
+import MapScreen from "./src/screens/MapScreen";
 
 // export default class App extends Component {
 //
@@ -49,7 +42,9 @@ import PlanScreen from "./src/screens/PlanScreen";
 const appNavigator = createStackNavigator(
     {
         Home: {screen: PlanListScreen},
-        Plan: {screen: PlanScreen}
+        Plan: {screen: PlanScreen},
+        PlanForm: {screen: PlanFormScreen},
+        Map: {screen: MapScreen}
     },
     {
         headerMode: 'none'
