@@ -1,7 +1,7 @@
 import MapView, { Marker } from 'react-native-maps'
 import React, { Component } from "react";
 import { Dimensions, StyleSheet } from "react-native";
-import { Button, Container, Text } from "native-base";
+import { Button, Container, Text, Toast } from "native-base";
 
 const GEOLOCATION_OPTIONS = {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000};
 
@@ -43,7 +43,11 @@ export default class MapScreen extends Component {
                     }
                 });
             },
-            GEOLOCATION_OPTIONS
+            () => Toast.show({
+                text: "Error while finding a location.",
+                buttonText: "Hide",
+                duration: 3000
+            })
         );
         this.watchID = navigator.geolocation.watchPosition(
             position => {
@@ -80,7 +84,7 @@ export default class MapScreen extends Component {
                         coordinate={this.state.markerLocation}
                     />
                 </MapView>
-                <Button full success onPress={() => {
+                <Button block success onPress={() => {
                     this.props.navigation.state.params.onLocationSelected(this.state.markerLocation);
                     this.props.navigation.goBack();
                 }}>

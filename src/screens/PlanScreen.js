@@ -1,17 +1,11 @@
-import React, {Component} from "react";
-import {StyleSheet, Text, View, FlatList} from "react-native";
-import {Container, Header, Left, Body, Button, Icon, Title} from 'native-base';
+import React, { Component } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { Body, Button, Container, Header, Icon, Left, Title } from 'native-base';
 import PlanElement from '../components/PlanElement';
-import {mockPlans} from "../data/mockPlans";
 
 class PlanScreen extends Component {
-    constructor(props) {
-        super(props);
-        const key = this.props.navigation.getParam('key');
-        this.state ={
-            plan: mockPlans.find(element => element.key === key)
-        }
-    }
+
+    plan = this.props.navigation.getParam('plan');
 
     _renderItem = ({item}) => {
         return <PlanElement name={item.name} price={item.price} duration={item.duration}/>
@@ -22,26 +16,26 @@ class PlanScreen extends Component {
             <Container>
                 <Header>
                     <Left>
-                        <Button transparent onClick={this.props.navigation.goBack()}>
+                        <Button transparent onPress={() => this.props.navigation.goBack()}>
                             <Icon name='arrow-back'/>
                         </Button>
                     </Left>
                     <Body>
-                        <Title>{this.state.plan.name}</Title>
+                        <Title>{this.plan.name}</Title>
                     </Body>
                 </Header>
                 <View style={[styles.header]}>
                     <Text style={styles.mainText}>
-                        by {this.state.plan.owner}
+                        by {this.plan.owner}
                     </Text>
                     <View style={styles.rowContainer}>
                         <Text style={[styles.mainText]}>
-                            Start {this.state.plan.date.toLocaleDateString()} {this.state.plan.duration}
+                            Start {this.plan.date.toLocaleDateString()} {this.plan.duration}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.body}>
-                    <FlatList data={this.state.plan.places} renderItem={this._renderItem}/>
+                    <FlatList data={this.plan.places} renderItem={this._renderItem}/>
                 </View>
             </Container>
         )

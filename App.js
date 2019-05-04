@@ -1,10 +1,10 @@
 import React from 'react';
-import * as firebase from 'react-native-firebase';
 import PlanListScreen from "./src/screens/PlanListScreen";
-import {createAppContainer, createStackNavigator} from "react-navigation";
+import { createAppContainer, createStackNavigator } from "react-navigation";
 import PlanScreen from "./src/screens/PlanScreen";
 import PlanFormScreen from "./src/screens/PlanFormScreen";
 import MapScreen from "./src/screens/MapScreen";
+import { Root } from "native-base";
 
 // export default class App extends Component {
 //
@@ -39,7 +39,7 @@ import MapScreen from "./src/screens/MapScreen";
 //     }
 // }
 
-const appNavigator = createStackNavigator(
+const AppNavigator = createAppContainer(createStackNavigator(
     {
         Home: {screen: PlanListScreen},
         Plan: {screen: PlanScreen},
@@ -48,6 +48,10 @@ const appNavigator = createStackNavigator(
     },
     {
         headerMode: 'none'
-    });
+    }));
 
-export default createAppContainer(appNavigator);
+export default () => (
+    <Root>
+        <AppNavigator/>
+    </Root>
+);
