@@ -1,10 +1,11 @@
 import React from 'react';
 import PlanListScreen from "./src/screens/PlanListScreen";
-import { createAppContainer, createStackNavigator } from "react-navigation";
+import { createAppContainer, createStackNavigator, createSwitchNavigator } from "react-navigation";
 import PlanScreen from "./src/screens/PlanScreen";
 import PlanFormScreen from "./src/screens/PlanFormScreen";
 import MapScreen from "./src/screens/MapScreen";
 import { Root } from "native-base";
+import SignUpScreen from "./src/screens/SignUpScreen";
 
 // export default class App extends Component {
 //
@@ -39,7 +40,7 @@ import { Root } from "native-base";
 //     }
 // }
 
-const AppNavigator = createAppContainer(createStackNavigator(
+const SignedIn = createStackNavigator(
     {
         Home: {screen: PlanListScreen},
         Plan: {screen: PlanScreen},
@@ -48,7 +49,30 @@ const AppNavigator = createAppContainer(createStackNavigator(
     },
     {
         headerMode: 'none'
-    }));
+    });
+
+const SignedOut = createStackNavigator(
+    {
+        Login: {screen: SignUpScreen}
+    },
+    {
+        headerMode: 'none'
+    }
+);
+
+const AppNavigator = (signedIn = false) => createAppContainer(createSwitchNavigator(
+    {
+        SignedIn: {
+            screen: SignedIn
+        },
+        SignedOut: {
+            screen: SignedOut
+        }
+    },
+    {
+        initialRouteName: signedIn ? "SignedIn" : "SignedOut"
+    }
+));
 
 export default () => (
     <Root>

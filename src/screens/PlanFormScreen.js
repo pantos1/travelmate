@@ -74,7 +74,11 @@ class PlanFormScreen extends Component {
                     <Formik
                         initialValues={{
                             name: '',
-                            date: ''
+                            description: '',
+                            date: '',
+                            latitude: 0,
+                            longitude: 0,
+                            places: []
                         }}
                         onSubmit={this.handleSubmit}
                         validationSchema={planValidationSchema}

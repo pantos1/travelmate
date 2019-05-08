@@ -13,10 +13,23 @@
           "package_name": "com.pantosiuk.travelmate"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1075849216932-82gvr3dit4cdjqlo79h2m4cg9li52120.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pantosiuk.travelmate",
+            "certificate_hash": "2c59d387b35c20615d3c5377eb80f7c2a31dfba4"
+          }
+        },
+        {
+          "client_id": "1075849216932-ed2ngjng8btdddspsm8rtjn8n40f2jcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCxMBuazpwY5QL_cAp6Rs1TgryNL1p2tyU"
+          "current_key": "AIzaSyC5ahQiFu07lYyS8GK2XxAOR997HIYUfHI"
         }
       ],
       "services": {
