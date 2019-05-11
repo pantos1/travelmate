@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Container, Form, Input, Item, Text } from 'native-base';
+import { Button, Container, Form, Input, Item, Text, Toast } from 'native-base';
 import { Formik } from 'formik';
 import { GoogleSigninButton } from 'react-native-google-signin';
 import * as Yup from 'yup';
+import firebase from 'react-native-firebase';
 
 const SignInValidationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
@@ -11,16 +12,30 @@ const SignInValidationSchema = Yup.object().shape({
 
 class SignInScreen extends Component {
     async signInWithEmail({ email, password }) {
-        // try{
-        //     const credential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        // } catch (e) {
-        //     // TODO: Switch based on error codes
-        //     Toast.show({
-        //         text: 'Error while signing in',
-        //         type: "danger",
-        //         buttonText: "Dismiss"
-        //     })
-        // }
+        try {
+            const credential = await firebase
+                .auth()
+                .signInWithEmailAndPassword(email, password);
+        } catch (e) {
+            let text;
+            console.log(e);
+            switch (e.errorCode) {
+                case 'wrong password':
+                    text = 'Wrong password';
+                    break;
+                case 'user-not-found':
+                    text = 'User with this email was not found';
+                    break;
+                default:
+                    text = 'Error while logging in, please try again.';
+                    break;
+            }
+            Toast.show({
+                text,
+                type: 'danger',
+                buttonText: 'Dismiss'
+            });
+        }
     }
 
     render() {
@@ -70,18 +85,21 @@ class SignInScreen extends Component {
                                 <Text>Sign In</Text>
                             </Button>
                             <Button
-                                onPress={this.props.navigation.navigate(
-                                    'SignUp'
-                                )}
+                                onPress={() =>
+                                    this.props.navigation.navigate('SignUp')
+                                }
                                 transparent
+                                full
                             >
-                                <Text>I don't have an account</Text>
+                                <Text uppercase={false}>
+                                    I don't have an account
+                                </Text>
                             </Button>
                         </Form>
                     )}
                 </Formik>
                 <GoogleSigninButton
-                    onPress={this.googleSignIn}
+                    onPress={this.signInWithEmail}
                     color={GoogleSigninButton.Color.Auto}
                     size={GoogleSigninButton.Size.Wide}
                 />

@@ -133,12 +133,15 @@ class SignUpScreen extends Component {
                                 <Text>Sign Up</Text>
                             </Button>
                             <Button
-                                onPress={this.props.navigation.navigate(
-                                    'SignIn'
-                                )}
+                                onPress={() =>
+                                    this.props.navigation.navigate('SignIn')
+                                }
                                 transparent
+                                full
                             >
-                                <Text>I already have an account</Text>
+                                <Text uppercase={false}>
+                                    I already have an account
+                                </Text>
                             </Button>
                         </Form>
                     )}

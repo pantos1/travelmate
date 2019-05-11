@@ -8,11 +8,13 @@ import {
 import PlanScreen from './src/screens/PlanScreen';
 import PlanFormScreen from './src/screens/PlanFormScreen';
 import MapScreen from './src/screens/MapScreen';
-import { Root, Spinner } from 'native-base';
+import { Root, Spinner, StyleProvider } from 'native-base';
 import SignUpScreen from './src/screens/SignUpScreen';
 import firebase from 'react-native-firebase';
 import { GoogleSignin } from 'react-native-google-signin';
 import SignInScreen from './src/screens/SignInScreen';
+import getTheme from './native-base-theme/components';
+import commonColor from './native-base-theme/variables/commonColor';
 
 export default class App extends Component {
     constructor(props) {
@@ -27,7 +29,9 @@ export default class App extends Component {
 
     componentDidMount() {
         this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
-            this.setState({ user, signedIn: true });
+            if (user) {
+                this.setState({ user, signedIn: true });
+            }
         });
         GoogleSignin.getCurrentUser().then(user => {
             if (user) {
@@ -54,7 +58,9 @@ export default class App extends Component {
 
         return (
             <Root>
-                <AppNavigator />
+                <StyleProvider style={getTheme(commonColor)}>
+                    <AppNavigator />
+                </StyleProvider>
             </Root>
         );
     }
