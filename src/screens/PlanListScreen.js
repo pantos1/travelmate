@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import {
-    Body,
-    Button,
-    Container,
-    Fab,
-    Footer,
-    FooterTab,
-    Header,
-    Icon,
-    Spinner,
-    Text,
-    Title
-} from 'native-base';
+import { Body, Button, Container, Fab, Footer, FooterTab, Header, Icon, Spinner, Text, Title } from 'native-base';
 import PlanListElement from '../components/PlanListElement';
 import { firestore } from 'react-native-firebase';
 
@@ -29,9 +17,7 @@ class PlanListScreen extends Component {
     }
 
     componentDidMount() {
-        this.unsubscribe = this.firestoreRef.onSnapshot(
-            this.onCollectionUpdate
-        );
+        this.unsubscribe = this.firestoreRef.onSnapshot(this.onCollectionUpdate);
     }
 
     componentWillUnmount() {
@@ -81,13 +67,10 @@ class PlanListScreen extends Component {
                         <Spinner />
                     ) : (
                         <>
-                            <FlatList
-                                data={this.state.plans}
-                                renderItem={this._renderItem}
-                            />
+                            <FlatList data={this.state.plans} renderItem={this._renderItem} />
                             <Fab
                                 position="bottomRight"
-                                style={styles.goldenColor}
+                                style={styles.fab}
                                 onPress={() => {
                                     this.props.navigation.navigate('PlanForm');
                                     this.unsubscribe();
@@ -100,15 +83,15 @@ class PlanListScreen extends Component {
                 </Container>
                 <Footer>
                     <FooterTab>
-                        <Button vertical>
-                            <Icon name="search" type="MaterialIcons" />
-                            <Text>Search</Text>
+                        <Button vertical style={styles.grey}>
+                            <Icon name="home" type="MaterialIcons" />
+                            <Text>Home</Text>
                         </Button>
-                        <Button vertical>
+                        <Button vertical style={styles.grey}>
                             <Icon name="list" type="MaterialIcons" />
                             <Text>My plans</Text>
                         </Button>
-                        <Button vertical>
+                        <Button vertical style={styles.grey}>
                             <Icon name="person" type="MaterialIcons" />
                             <Text>Profile</Text>
                         </Button>
@@ -120,6 +103,7 @@ class PlanListScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    grey: { color: '#737373' },
     fab: { backgroundColor: '#028f48' },
     goldenColor: { backgroundColor: '#C7AA3C' }
 });

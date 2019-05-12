@@ -9,11 +9,7 @@ const deviceWidth = Dimensions.get('window').width;
 const platform = Platform.OS;
 const platformStyle = undefined;
 const isIphoneX =
-    platform === 'ios' &&
-    (deviceHeight === 812 ||
-        deviceWidth === 812 ||
-        deviceHeight === 896 ||
-        deviceWidth === 896);
+    platform === 'ios' && (deviceHeight === 812 || deviceWidth === 812 || deviceHeight === 896 || deviceWidth === 896);
 
 export default {
     platformStyle,
@@ -72,9 +68,7 @@ export default {
         return this.inverseTextColor;
     },
     get btnTextSize() {
-        return platform === 'ios'
-            ? this.fontSizeBase * 1.1
-            : this.fontSizeBase - 1;
+        return platform === 'ios' ? this.fontSizeBase * 1.1 : this.fontSizeBase - 1;
     },
     get btnTextSizeLarge() {
         return this.fontSizeBase * 1.5;
@@ -142,15 +136,15 @@ export default {
 
     // Footer
     footerHeight: 55,
-    footerDefaultBg: platform === 'ios' ? '#F8F8F8' : '#028f48',
+    footerDefaultBg: platform === 'ios' ? '#F8F8F8' : '#F8F8F8',
     footerPaddingBottom: 0,
 
     // FooterTab
-    tabBarTextColor: platform === 'ios' ? '#737373' : '#fff',
+    tabBarTextColor: platform === 'ios' ? '#737373' : '#737373',
     tabBarTextSize: platform === 'ios' ? 14 : 11,
-    activeTab: platform === 'ios' ? '#007aff' : '#fff',
+    activeTab: platform === 'ios' ? '#007aff' : '#028f48',
     sTabBarActiveTextColor: '#007aff',
-    tabBarActiveTextColor: platform === 'ios' ? '#2874F0' : '#fff',
+    tabBarActiveTextColor: platform === 'ios' ? '#2874F0' : '#028f48',
     tabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#028f48',
 
     // Header

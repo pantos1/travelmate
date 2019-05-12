@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import {StyleSheet, Text, View, FlatList} from "react-native";
-import {Icon} from 'native-base';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Icon } from 'native-base';
 
 class PlanElement extends Component {
     constructor(props) {
@@ -13,41 +13,40 @@ class PlanElement extends Component {
                 <View style={styles.info}>
                     <Text style={styles.title}>{this.props.name}</Text>
                     <View style={styles.rowContainer}>
-                        <Icon name='attach-money' type='MaterialIcons' />
+                        <Icon name="attach-money" type="MaterialIcons" />
                         <Text>{this.props.price}</Text>
                     </View>
                     <View style={styles.rowContainer}>
-                        <Icon name='timelapse' type='MaterialIcons'/>
+                        <Icon name="timelapse" type="MaterialIcons" />
                         <Text>{this.props.duration}</Text>
                     </View>
                 </View>
             </View>
-        )
+        );
     }
-
 }
 
 const styles = StyleSheet.create({
     listElementContainer: {
         flex: 1,
-        flexDirection: "row",
-        width: "100%",
+        flexDirection: 'row',
+        width: '100%',
         paddingTop: 10,
         paddingBottom: 10,
-        borderBottomColor: "#AAAAAA",
+        borderBottomColor: '#AAAAAA',
         borderBottomWidth: 2
     },
     info: {
         flex: 1,
-        flexDirection: "column",
-        alignItems: "flex-start",
+        flexDirection: 'column',
+        alignItems: 'flex-start',
         paddingLeft: 30
     },
     title: {
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: 'bold'
     },
-    rowContainer: {flex: 1, alignItems: "center", flexDirection: "row"},
+    rowContainer: { flex: 1, alignItems: 'center', flexDirection: 'row' }
 });
 
 export default PlanElement;

@@ -1,29 +1,17 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import {
-    Body,
-    Button,
-    Container,
-    Header,
-    Icon,
-    Left,
-    Right,
-    Text,
-    Title
-} from 'native-base';
+import { Body, Button, Container, Header, Icon, Left, Right, Text, Title } from 'native-base';
 import PlanElement from '../components/PlanElement';
+import firebase from 'react-native-firebase';
 
 class PlanScreen extends Component {
     plan = this.props.navigation.getParam('plan');
+    state = {
+        user: firebase.auth().currentUser
+    };
 
     _renderItem = ({ item }) => {
-        return (
-            <PlanElement
-                name={item.name}
-                price={item.price}
-                duration={item.duration}
-            />
-        );
+        return <PlanElement name={item.name} price={item.price} duration={item.duration} />;
     };
 
     render() {
@@ -31,10 +19,7 @@ class PlanScreen extends Component {
             <Container>
                 <Header>
                     <Left>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.goBack()}
-                        >
+                        <Button transparent onPress={() => this.props.navigation.goBack()}>
                             <Icon name="arrow-back" />
                         </Button>
                     </Left>
@@ -42,25 +27,32 @@ class PlanScreen extends Component {
                         <Title>{this.plan.name}</Title>
                     </Body>
                     <Right>
-                        <Button transparent>
-                            <Text>Join</Text>
-                        </Button>
+                        {this.state.user.uid === this.plan.owner.uid ? (
+                            <>
+                                <Button>
+                                    <Text>Edit</Text>
+                                </Button>
+                                <Button>
+                                    <Text>Delete</Text>
+                                </Button>
+                            </>
+                        ) : (
+                            <Button transparent>
+                                <Text>Join</Text>
+                            </Button>
+                        )}
                     </Right>
                 </Header>
                 <View style={[styles.header]}>
-                    <Text style={styles.mainText}>by {this.plan.owner}</Text>
+                    <Text style={styles.mainText}>by {this.plan.owner.displayName}</Text>
                     <View style={styles.rowContainer}>
                         <Text style={[styles.mainText]}>
-                            Start {this.plan.date.toLocaleDateString()}{' '}
-                            {this.plan.duration}
+                            Start {this.plan.date.toLocaleDateString()} {this.plan.duration}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.body}>
-                    <FlatList
-                        data={this.plan.places}
-                        renderItem={this._renderItem}
-                    />
+                    <FlatList data={this.plan.places} renderItem={this._renderItem} />
                 </View>
             </Container>
         );

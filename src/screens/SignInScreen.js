@@ -13,9 +13,7 @@ const SignInValidationSchema = Yup.object().shape({
 class SignInScreen extends Component {
     async signInWithEmail({ email, password }) {
         try {
-            const credential = await firebase
-                .auth()
-                .signInWithEmailAndPassword(email, password);
+            const credential = await firebase.auth().signInWithEmailAndPassword(email, password);
         } catch (e) {
             let text;
             console.log(e);
@@ -61,11 +59,7 @@ class SignInScreen extends Component {
                                     autoCapitalize="none"
                                     placeholder="Email"
                                 />
-                                {errors.email && (
-                                    <Text style={styles.errorText}>
-                                        {errors.email}
-                                    </Text>
-                                )}
+                                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                             </Item>
                             <Item>
                                 <Input
@@ -75,25 +69,13 @@ class SignInScreen extends Component {
                                     autoCapitalize="none"
                                     secureTextEntry
                                 />
-                                {errors.password && (
-                                    <Text style={styles.errorText}>
-                                        {errors.password}
-                                    </Text>
-                                )}
+                                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                             </Item>
                             <Button onPress={handleSubmit} full>
                                 <Text>Sign In</Text>
                             </Button>
-                            <Button
-                                onPress={() =>
-                                    this.props.navigation.navigate('SignUp')
-                                }
-                                transparent
-                                full
-                            >
-                                <Text uppercase={false}>
-                                    I don't have an account
-                                </Text>
+                            <Button onPress={() => this.props.navigation.navigate('SignUp')} transparent full>
+                                <Text uppercase={false}>I don't have an account</Text>
                             </Button>
                         </Form>
                     )}

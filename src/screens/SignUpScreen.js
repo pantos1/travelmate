@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Container, Form, Input, Item, Text, Toast } from 'native-base';
-import {
-    GoogleSignin,
-    GoogleSigninButton,
-    statusCodes
-} from 'react-native-google-signin';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 import firebase from 'react-native-firebase';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -17,10 +13,7 @@ const SignUpValidationSchema = Yup.object().shape({
     password: Yup.string()
         .min(6, 'Password has to have at least 6 characters')
         .required('Password is required'),
-    passwordConfirmed: Yup.string().oneOf(
-        [Yup.ref('password')],
-        'Passwords do not match'
-    )
+    passwordConfirmed: Yup.string().oneOf([Yup.ref('password')], 'Passwords do not match')
 });
 
 class SignUpScreen extends Component {
@@ -32,13 +25,9 @@ class SignUpScreen extends Component {
 
             const data = await GoogleSignin.signIn();
 
-            const credential = firebase
-                .auth()
-                .GoogleAuthProvider.credential(data.idToken, data.accessToken);
+            const credential = firebase.auth().GoogleAuthProvider.credential(data.idToken, data.accessToken);
 
-            const firebaseUserCredential = await firebase
-                .auth()
-                .signInWithCredential(credential);
+            const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
         } catch (e) {
             let text;
             if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
@@ -54,11 +43,11 @@ class SignUpScreen extends Component {
         }
     };
 
-    async signUpWithEmail({ email, password }) {
+    async signUpWithEmail({ email, password, displayName }) {
         try {
-            const credential = await firebase
-                .auth()
-                .createUserWithEmailAndPassword(email, password);
+            const credential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            const user = firebase.auth().currentUser;
+            await user.updateProfile({ displayName });
         } catch (e) {
             // TODO: Switch based on error codes
             Toast.show({
@@ -76,7 +65,8 @@ class SignUpScreen extends Component {
                     initialValues={{
                         email: '',
                         password: '',
-                        passwordConfirmed: ''
+                        passwordConfirmed: '',
+                        displayName: ''
                     }}
                     onSubmit={this.signUpWithEmail}
                     validationSchema={SignUpValidationSchema}
@@ -87,17 +77,21 @@ class SignUpScreen extends Component {
                         <Form>
                             <Item>
                                 <Input
+                                    onChangeText={handleChange('displayName')}
+                                    value={values.displayName}
+                                    placeholder="Name"
+                                />
+                                {errors.displayName && <Text style={styles.errorText}>{errors.displayName}</Text>}
+                            </Item>
+                            <Item>
+                                <Input
                                     onChangeText={handleChange('email')}
                                     value={values.email}
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     placeholder="Email"
                                 />
-                                {errors.email && (
-                                    <Text style={styles.errorText}>
-                                        {errors.email}
-                                    </Text>
-                                )}
+                                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                             </Item>
                             <Item>
                                 <Input
@@ -107,41 +101,25 @@ class SignUpScreen extends Component {
                                     autoCapitalize="none"
                                     secureTextEntry
                                 />
-                                {errors.password && (
-                                    <Text style={styles.errorText}>
-                                        {errors.password}
-                                    </Text>
-                                )}
+                                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                             </Item>
                             <Item>
                                 <Input
-                                    onChangeText={handleChange(
-                                        'passwordConfirmed'
-                                    )}
+                                    onChangeText={handleChange('passwordConfirmed')}
                                     value={values.passwordConfirmed}
                                     placeholder="Confirm password"
                                     autoCapitalize="none"
                                     secureTextEntry
                                 />
                                 {errors.passwordConfirmed && (
-                                    <Text style={styles.errorText}>
-                                        {errors.passwordConfirmed}
-                                    </Text>
+                                    <Text style={styles.errorText}>{errors.passwordConfirmed}</Text>
                                 )}
                             </Item>
                             <Button onPress={handleSubmit} full>
                                 <Text>Sign Up</Text>
                             </Button>
-                            <Button
-                                onPress={() =>
-                                    this.props.navigation.navigate('SignIn')
-                                }
-                                transparent
-                                full
-                            >
-                                <Text uppercase={false}>
-                                    I already have an account
-                                </Text>
+                            <Button onPress={() => this.props.navigation.navigate('SignIn')} transparent full>
+                                <Text uppercase={false}>I already have an account</Text>
                             </Button>
                         </Form>
                     )}
