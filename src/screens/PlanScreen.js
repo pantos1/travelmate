@@ -12,7 +12,8 @@ class PlanScreen extends Component {
         .doc(this.plan.key);
     state = {
         user: firebase.auth().currentUser,
-        modalVisible: false
+        modalVisible: false,
+        loading: false
     };
 
     _renderItem = ({ item }) => {
@@ -21,16 +22,27 @@ class PlanScreen extends Component {
 
     _deleteItem = async () => {
         try {
-            this.setState({ modalVisible: false });
+            this.setState({ loading: true });
             await this.planRef.delete();
+            this.setState({ modalVisible: false });
+            this.setState({ loading: false });
             this.props.navigation.navigate('Home');
         } catch (e) {
+            this.setState({ loading: false });
             Toast.show({
                 text: 'Error deleting the plan',
                 type: 'danger',
                 buttonText: 'Dismiss'
             });
         }
+    };
+
+    _handleEdit = () => {
+        this.props.navigation.navigate('PlanForm', {
+            initialValues: {
+                ...this.plan
+            }
+        });
     };
 
     render() {
@@ -48,7 +60,7 @@ class PlanScreen extends Component {
                     <Right>
                         {this.state.user.uid === this.plan.owner.uid ? (
                             <>
-                                <Button transparent>
+                                <Button transparent onPress={() => this._handleEdit()}>
                                     <Text>Edit</Text>
                                 </Button>
                                 <Button transparent onPress={() => this.setState({ modalVisible: true })}>
@@ -85,7 +97,13 @@ class PlanScreen extends Component {
                                 <Button small transparent dark onPress={() => this.setState({ modalVisible: false })}>
                                     <Text>Cancel</Text>
                                 </Button>
-                                <Button small transparent danger onPress={() => this._deleteItem()}>
+                                <Button
+                                    small
+                                    transparent
+                                    danger
+                                    onPress={() => this._deleteItem()}
+                                    disabled={this.state.loading}
+                                >
                                     <Text>Delete</Text>
                                 </Button>
                             </View>

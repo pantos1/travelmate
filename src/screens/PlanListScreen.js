@@ -73,7 +73,6 @@ class PlanListScreen extends Component {
                                 style={styles.fab}
                                 onPress={() => {
                                     this.props.navigation.navigate('PlanForm');
-                                    this.unsubscribe();
                                 }}
                             >
                                 <Icon name="add" type="MaterialIcons" />

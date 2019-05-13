@@ -13,6 +13,7 @@ import {
     Item,
     Label,
     Left,
+    Picker,
     Text,
     Textarea,
     Title,
@@ -22,6 +23,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import * as Yup from 'yup';
 import { StyleSheet } from 'react-native';
 import firebase, { firestore } from 'react-native-firebase';
+import { currencies } from '../../native-base-theme/data/currencies';
 
 const planValidationSchema = Yup.object().shape({
     name: Yup.string().required('Please enter plan name'),
@@ -45,8 +47,10 @@ const planValidationSchema = Yup.object().shape({
 
 class PlanFormScreen extends Component {
     firestoreRef = firestore().collection('trips');
+    initialValues = this.props.navigation.getParam('initialValues');
     state = {
-        dateTimePickerVisible: false
+        dateTimePickerVisible: false,
+        loading: false
     };
 
     toggleDateTimePicker = () => {
@@ -54,15 +58,25 @@ class PlanFormScreen extends Component {
     };
 
     handleSubmit = async values => {
+        this.setState({ loading: true });
         const { uid, displayName } = firebase.auth().currentUser;
         values.owner = { uid, displayName };
         values.places.forEach((plan, index) => {
             plan.key = index.toString();
         });
         try {
-            await this.firestoreRef.add(values);
+            if (this.initialValues) {
+                const docRef = this.firestoreRef.doc(this.initialValues.key);
+                console.log(docRef);
+                console.log(values);
+                await docRef.update(values);
+            } else {
+                await this.firestoreRef.add(values);
+            }
+            this.setState({ loading: false });
             this.props.navigation.navigate('Home');
         } catch (e) {
+            this.setState({ loading: false });
             Toast.show({
                 text: 'Error adding trip plan. Please try again',
                 type: 'danger',
@@ -80,19 +94,17 @@ class PlanFormScreen extends Component {
                             <Icon name="arrow-back" />
                         </Button>
                     </Left>
-                    <Body>
-                        <Title>Add new trip</Title>
-                    </Body>
+                    <Body>{this.initialValues ? <Title>Edit trip</Title> : <Title>Add new trip</Title>}</Body>
                 </Header>
                 <Content>
                     <Formik
                         initialValues={{
-                            name: '',
-                            description: '',
-                            date: '',
-                            latitude: 0,
-                            longitude: 0,
-                            places: []
+                            name: this.initialValues ? this.initialValues.name : '',
+                            description: this.initialValues ? this.initialValues.description : '',
+                            date: this.initialValues ? this.initialValues.date : '',
+                            latitude: this.initialValues ? this.initialValues.latitude : 0,
+                            longitude: this.initialValues ? this.initialValues.longitude : 0,
+                            places: this.initialValues ? this.initialValues.places : []
                         }}
                         onSubmit={this.handleSubmit}
                         validationSchema={planValidationSchema}
@@ -188,7 +200,7 @@ class PlanFormScreen extends Component {
                                                                           <ErrorMessage name={`places.${index}.name`} />
                                                                       </Item>
                                                                       <Item stackedLabel>
-                                                                          <Label>Duration</Label>
+                                                                          <Label>Visit time in hours</Label>
                                                                           <Input
                                                                               onChangeText={duration =>
                                                                                   setFieldValue(
@@ -222,6 +234,28 @@ class PlanFormScreen extends Component {
                                                                           <ErrorMessage
                                                                               name={`places.${index}.price`}
                                                                           />
+                                                                      </Item>
+                                                                      <Item>
+                                                                          <Picker
+                                                                              onValueChange={itemValue =>
+                                                                                  setFieldValue(
+                                                                                      `places.${index}.currency`,
+                                                                                      itemValue
+                                                                                  )
+                                                                              }
+                                                                              selectedValue={
+                                                                                  values.places[index].currency
+                                                                              }
+                                                                              mode="dropdown"
+                                                                          >
+                                                                              {currencies.map(value => (
+                                                                                  <Picker.Item
+                                                                                      label={value}
+                                                                                      value={value}
+                                                                                      key={value}
+                                                                                  />
+                                                                              ))}
+                                                                          </Picker>
                                                                       </Item>
                                                                       <Item
                                                                           stackedLabel
@@ -262,7 +296,8 @@ class PlanFormScreen extends Component {
                                                                     duration: '',
                                                                     latitude: 0,
                                                                     longitude: 0,
-                                                                    price: ''
+                                                                    price: '',
+                                                                    currency: "USD"
                                                                 })
                                                             }
                                                         >
@@ -274,7 +309,7 @@ class PlanFormScreen extends Component {
                                         </Container>
                                     </Item>
                                 </Form>
-                                <Button onPress={handleSubmit} full>
+                                <Button onPress={handleSubmit} full disabled={this.state.loading}>
                                     <Text>Submit</Text>
                                 </Button>
                             </>
