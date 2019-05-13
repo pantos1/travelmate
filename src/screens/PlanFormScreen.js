@@ -38,6 +38,7 @@ const planValidationSchema = Yup.object().shape({
                     .positive('Duration has to be a positive number')
                     .required('Please enter time to see the place'),
                 price: Yup.number().min(0, 'Price cannot be negative'),
+                currency: Yup.string().required("Please select currency"),
                 latitude: Yup.number().required("Please select trip's start location"),
                 longitude: Yup.number().required("Please select trip's start location")
             })
@@ -82,6 +83,23 @@ class PlanFormScreen extends Component {
                 type: 'danger',
                 buttonText: 'Dismiss'
             });
+        }
+    };
+
+    _parseNumber = input => {
+        const number = parseFloat(input);
+        if (!isNaN(number)) {
+            return number;
+        } else {
+            return null;
+        }
+    };
+
+    _parseStringNumber = value => {
+        if (value !== null) {
+            return value.toString(10);
+        } else {
+            return '';
         }
     };
 
@@ -205,12 +223,12 @@ class PlanFormScreen extends Component {
                                                                               onChangeText={duration =>
                                                                                   setFieldValue(
                                                                                       `places.${index}.duration`,
-                                                                                      parseFloat(duration)
+                                                                                      this._parseNumber(duration)
                                                                                   )
                                                                               }
-                                                                              value={values.places[
-                                                                                  index
-                                                                              ].duration.toString(10)}
+                                                                              value={this._parseStringNumber(
+                                                                                  values.places[index].duration
+                                                                              )}
                                                                               keyboardType="numeric"
                                                                           />
                                                                           <ErrorMessage
@@ -223,19 +241,19 @@ class PlanFormScreen extends Component {
                                                                               onChangeText={price =>
                                                                                   setFieldValue(
                                                                                       `places.${index}.price`,
-                                                                                      parseFloat(price)
+                                                                                      this._parseNumber(price)
                                                                                   )
                                                                               }
-                                                                              value={values.places[
-                                                                                  index
-                                                                              ].price.toString(10)}
+                                                                              value={this._parseStringNumber(
+                                                                                  values.places[index].price
+                                                                              )}
                                                                               keyboardType="numeric"
                                                                           />
                                                                           <ErrorMessage
                                                                               name={`places.${index}.price`}
                                                                           />
                                                                       </Item>
-                                                                      <Item>
+                                                                      <Item picker>
                                                                           <Picker
                                                                               onValueChange={itemValue =>
                                                                                   setFieldValue(
@@ -256,6 +274,7 @@ class PlanFormScreen extends Component {
                                                                                   />
                                                                               ))}
                                                                           </Picker>
+                                                                          <ErrorMessage name={`places.${index}.currency`} />
                                                                       </Item>
                                                                       <Item
                                                                           stackedLabel
@@ -297,7 +316,7 @@ class PlanFormScreen extends Component {
                                                                     latitude: 0,
                                                                     longitude: 0,
                                                                     price: '',
-                                                                    currency: "USD"
+                                                                    currency: 'USD'
                                                                 })
                                                             }
                                                         >

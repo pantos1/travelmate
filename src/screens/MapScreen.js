@@ -1,7 +1,7 @@
 import MapView, { Marker } from 'react-native-maps';
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
-import { Button, Container, Text, Toast } from 'native-base';
+import { Dimensions, StyleSheet, View } from 'react-native';
+import { Button, Text, Toast } from 'native-base';
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
 
@@ -14,6 +14,7 @@ export default class MapScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            marginBottom: 1,
             region: {
                 latitude: 0,
                 longitude: 0,
@@ -26,6 +27,8 @@ export default class MapScreen extends Component {
             }
         };
     }
+
+    _onMapReady = () => this.setState({marginBottom: 0});
 
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
@@ -72,12 +75,21 @@ export default class MapScreen extends Component {
 
     render() {
         return (
-            <Container style={styles.container}>
+            <View style={styles.container}>
                 <MapView
-                    style={styles.map}
+                    style={{        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        flex: 1,
+                        marginBottom: this.state.marginBottom}}
                     showsUserLocation={true}
                     showsMyLocationButton={true}
+                    showsCompass={true}
                     region={this.state.region}
+                    onMapReady={this._onMapReady}
+                    onPress={(e) => this.setState({markerLocation: e.nativeEvent.coordinate})}
                 >
                     <Marker coordinate={this.state.markerLocation} />
                 </MapView>
@@ -91,7 +103,7 @@ export default class MapScreen extends Component {
                 >
                     <Text>Select start location</Text>
                 </Button>
-            </Container>
+            </View>
         );
     }
 }
@@ -111,6 +123,7 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0
+        bottom: 0,
+        flex: 1
     }
 });
