@@ -142,10 +142,10 @@ export default {
     // FooterTab
     tabBarTextColor: platform === 'ios' ? '#737373' : '#737373',
     tabBarTextSize: platform === 'ios' ? 14 : 11,
-    activeTab: platform === 'ios' ? '#007aff' : '#028f48',
-    sTabBarActiveTextColor: '#007aff',
+    activeTab: platform === 'ios' ? '#007aff' : '#F8F8F8',
+    sTabBarActiveTextColor: '#028f48',
     tabBarActiveTextColor: platform === 'ios' ? '#2874F0' : '#028f48',
-    tabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#028f48',
+    tabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#F8F8F8',
 
     // Header
     toolbarBtnColor: platform === 'ios' ? '#007aff' : '#fff',

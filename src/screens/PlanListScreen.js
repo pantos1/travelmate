@@ -44,7 +44,7 @@ class PlanListScreen extends Component {
         return (
             <PlanListElement
                 name={item.name}
-                owner={item.owner}
+                owner={item.owner.displayName}
                 date={item.date}
                 onClick={() => {
                     this.unsubscribe();
@@ -64,7 +64,7 @@ class PlanListScreen extends Component {
                 </Header>
                 <Container>
                     {this.state.loading ? (
-                        <Spinner />
+                        <Spinner color="#737373" />
                     ) : (
                         <>
                             <FlatList data={this.state.plans} renderItem={this._renderItem} />
@@ -83,7 +83,7 @@ class PlanListScreen extends Component {
                 </Container>
                 <Footer>
                     <FooterTab>
-                        <Button vertical style={styles.grey}>
+                        <Button vertical style={styles.grey} active>
                             <Icon name="home" type="MaterialIcons" />
                             <Text>Home</Text>
                         </Button>

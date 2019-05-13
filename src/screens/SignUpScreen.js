@@ -43,7 +43,7 @@ class SignUpScreen extends Component {
         }
     };
 
-    async signUpWithEmail({ email, password, displayName }) {
+    signUpWithEmail = async ({ email, password, displayName }) => {
         try {
             const credential = await firebase.auth().createUserWithEmailAndPassword(email, password);
             const user = firebase.auth().currentUser;
@@ -56,7 +56,7 @@ class SignUpScreen extends Component {
                 buttonText: 'Dismiss'
             });
         }
-    }
+    };
 
     render() {
         return (

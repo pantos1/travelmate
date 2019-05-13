@@ -1,17 +1,36 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Body, Button, Container, Header, Icon, Left, Right, Text, Title } from 'native-base';
+import Modal from 'react-native-modal';
+import { Body, Button, Container, Header, Icon, Left, Right, Text, Title, Toast } from 'native-base';
 import PlanElement from '../components/PlanElement';
-import firebase from 'react-native-firebase';
+import firebase, { firestore } from 'react-native-firebase';
 
 class PlanScreen extends Component {
     plan = this.props.navigation.getParam('plan');
+    planRef = firestore()
+        .collection('trips')
+        .doc(this.plan.key);
     state = {
-        user: firebase.auth().currentUser
+        user: firebase.auth().currentUser,
+        modalVisible: false
     };
 
     _renderItem = ({ item }) => {
         return <PlanElement name={item.name} price={item.price} duration={item.duration} />;
+    };
+
+    _deleteItem = async () => {
+        try {
+            this.setState({ modalVisible: false });
+            await this.planRef.delete();
+            this.props.navigation.navigate('Home');
+        } catch (e) {
+            Toast.show({
+                text: 'Error deleting the plan',
+                type: 'danger',
+                buttonText: 'Dismiss'
+            });
+        }
     };
 
     render() {
@@ -29,10 +48,10 @@ class PlanScreen extends Component {
                     <Right>
                         {this.state.user.uid === this.plan.owner.uid ? (
                             <>
-                                <Button>
+                                <Button transparent>
                                     <Text>Edit</Text>
                                 </Button>
-                                <Button>
+                                <Button transparent onPress={() => this.setState({ modalVisible: true })}>
                                     <Text>Delete</Text>
                                 </Button>
                             </>
@@ -53,6 +72,25 @@ class PlanScreen extends Component {
                 </View>
                 <View style={styles.body}>
                     <FlatList data={this.plan.places} renderItem={this._renderItem} />
+                </View>
+                <View>
+                    <Modal
+                        isVisible={this.state.modalVisible}
+                        onBackButtonPress={() => this.setState({ modalVisible: false })}
+                        onBackdropPress={() => this.setState({ modalVisible: false })}
+                    >
+                        <View style={styles.modalContent}>
+                            <Text>Are you sure you want to delete this trip?</Text>
+                            <View style={styles.modalButtonWrapper}>
+                                <Button small transparent dark onPress={() => this.setState({ modalVisible: false })}>
+                                    <Text>Cancel</Text>
+                                </Button>
+                                <Button small transparent danger onPress={() => this._deleteItem()}>
+                                    <Text>Delete</Text>
+                                </Button>
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
             </Container>
         );
@@ -83,7 +121,19 @@ const styles = StyleSheet.create({
     columnContainer: { flex: 1, flexDirection: 'column' },
     whiteText: { color: 'white' },
     planTitle: { fontSize: 24 },
-    mainText: { fontSize: 16 }
+    mainText: { fontSize: 16 },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)'
+    },
+    modalButtonWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    }
 });
 
 export default PlanScreen;

@@ -15,7 +15,8 @@ import {
     Left,
     Text,
     Textarea,
-    Title
+    Title,
+    Toast
 } from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import * as Yup from 'yup';
@@ -58,6 +59,16 @@ class PlanFormScreen extends Component {
         values.places.forEach((plan, index) => {
             plan.key = index.toString();
         });
+        try {
+            await this.firestoreRef.add(values);
+            this.props.navigation.navigate('Home');
+        } catch (e) {
+            Toast.show({
+                text: 'Error adding trip plan. Please try again',
+                type: 'danger',
+                buttonText: 'Dismiss'
+            });
+        }
     };
 
     render() {
