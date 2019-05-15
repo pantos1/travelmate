@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PlanListScreen from './src/screens/PlanListScreen';
 import {
     createAppContainer,
+    createBottomTabNavigator,
     createStackNavigator,
     createSwitchNavigator
 } from 'react-navigation';
@@ -15,6 +16,8 @@ import { GoogleSignin } from 'react-native-google-signin';
 import SignInScreen from './src/screens/SignInScreen';
 import getTheme from './native-base-theme/components';
 import commonColor from './native-base-theme/variables/commonColor';
+import ProfileScreen from './src/screens/ProfileScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default class App extends Component {
     constructor(props) {
@@ -31,11 +34,15 @@ export default class App extends Component {
         this.unsubscriber = firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 this.setState({ user, signedIn: true });
+            } else {
+                this.setState({ user: null, signedIn: false});
             }
         });
         GoogleSignin.getCurrentUser().then(user => {
             if (user) {
                 this.setState({ user, signedIn: true });
+            } else {
+                this.setState({ user: null, signedIn: false});
             }
         });
         this.setState({ checkedSignIn: true });
@@ -66,7 +73,7 @@ export default class App extends Component {
     }
 }
 
-const SignedIn = createStackNavigator(
+const HomeStack = createStackNavigator(
     {
         Home: { screen: PlanListScreen },
         Plan: { screen: PlanScreen },
@@ -77,6 +84,41 @@ const SignedIn = createStackNavigator(
         headerMode: 'none'
     }
 );
+
+HomeStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible = true;
+    if (navigation.state.index > 0) {
+        tabBarVisible = false;
+    }
+
+    return {
+        tabBarVisible
+    };
+};
+
+const SignedIn = createBottomTabNavigator({
+    Home: HomeStack,
+    Profile: ProfileScreen,
+},
+    {
+        defaultNavigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ tintColor }) => {
+                const { routeName } = navigation.state;
+                let IconComponent = Ionicons;
+                let iconName;
+                if (routeName === 'Home') {
+                    iconName = `ios-home`;
+                } else if (routeName === 'Profile') {
+                    iconName = `ios-person`;
+                }
+                return <IconComponent name={iconName} size={25} color={tintColor} />;
+            }
+        }),
+        tabBarOptions: {
+            activeTintColor: '#028f48',
+            inactiveTintColor: '#737373'
+        }
+    });
 
 const SignedOut = createStackNavigator(
     {

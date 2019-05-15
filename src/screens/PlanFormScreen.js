@@ -68,10 +68,9 @@ class PlanFormScreen extends Component {
         try {
             if (this.initialValues) {
                 const docRef = this.firestoreRef.doc(this.initialValues.key);
-                console.log(docRef);
-                console.log(values);
                 await docRef.update(values);
             } else {
+                values.participants = [];
                 await this.firestoreRef.add(values);
             }
             this.setState({ loading: false });

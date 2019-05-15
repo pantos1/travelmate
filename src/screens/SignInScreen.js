@@ -11,12 +11,18 @@ const SignInValidationSchema = Yup.object().shape({
 });
 
 class SignInScreen extends Component {
-    async signInWithEmail({ email, password }) {
+    state = {
+        loading: false
+    };
+
+    signInWithEmail = async ({ email, password }) => {
         try {
+            this.setState({loading: true});
             const credential = await firebase.auth().signInWithEmailAndPassword(email, password);
+            this.setState({loading: false});
         } catch (e) {
+            this.setState({loading: false});
             let text;
-            console.log(e);
             switch (e.errorCode) {
                 case 'wrong password':
                     text = 'Wrong password';
@@ -34,7 +40,7 @@ class SignInScreen extends Component {
                 buttonText: 'Dismiss'
             });
         }
-    }
+    };
 
     render() {
         return (
@@ -61,7 +67,7 @@ class SignInScreen extends Component {
                                 />
                                 {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                             </Item>
-                            <Item>
+                            <Item last>
                                 <Input
                                     onChangeText={handleChange('password')}
                                     value={values.password}
@@ -71,7 +77,7 @@ class SignInScreen extends Component {
                                 />
                                 {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                             </Item>
-                            <Button onPress={handleSubmit} full>
+                            <Button onPress={handleSubmit} block disabled={this.state.loading}>
                                 <Text>Sign In</Text>
                             </Button>
                             <Button onPress={() => this.props.navigation.navigate('SignUp')} transparent full>

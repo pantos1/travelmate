@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import { Body, Button, Container, Fab, Footer, FooterTab, Header, Icon, Spinner, Text, Title } from 'native-base';
+import { Body, Container, Fab, Header, Icon, Spinner, Title } from 'native-base';
 import PlanListElement from '../components/PlanListElement';
 import { firestore } from 'react-native-firebase';
 
@@ -80,22 +80,22 @@ class PlanListScreen extends Component {
                         </>
                     )}
                 </Container>
-                <Footer>
-                    <FooterTab>
-                        <Button vertical style={styles.grey} active>
-                            <Icon name="home" type="MaterialIcons" />
-                            <Text>Home</Text>
-                        </Button>
-                        <Button vertical style={styles.grey}>
-                            <Icon name="list" type="MaterialIcons" />
-                            <Text>My plans</Text>
-                        </Button>
-                        <Button vertical style={styles.grey}>
-                            <Icon name="person" type="MaterialIcons" />
-                            <Text>Profile</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer>
+                {/*<Footer>*/}
+                {/*    <FooterTab>*/}
+                {/*        <Button vertical style={styles.grey} active>*/}
+                {/*            <Icon name="home" type="MaterialIcons" />*/}
+                {/*            <Text>Home</Text>*/}
+                {/*        </Button>*/}
+                {/*        <Button vertical style={styles.grey}>*/}
+                {/*            <Icon name="list" type="MaterialIcons" />*/}
+                {/*            <Text>My plans</Text>*/}
+                {/*        </Button>*/}
+                {/*        <Button vertical style={styles.grey}>*/}
+                {/*            <Icon name="person" type="MaterialIcons" />*/}
+                {/*            <Text>Profile</Text>*/}
+                {/*        </Button>*/}
+                {/*    </FooterTab>*/}
+                {/*</Footer>*/}
             </Container>
         );
     }

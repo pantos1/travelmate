@@ -45,6 +45,27 @@ class PlanScreen extends Component {
         });
     };
 
+    _joinTrip = async() => {
+        try{
+            const plan = await this.planRef.get();
+            const planData = plan.data();
+            planData.participants.push({uid: this.state.user.uid, displayName: this.state.user.displayName});
+            await this.planRef.set(planData, {merge: true});
+            Toast.show({
+                text: 'You have joined the trip!',
+                type: 'success',
+                buttonText: 'Ok'
+            })
+        } catch (e) {
+            console.log(e);
+            Toast.show({
+                text: 'Oops something went wrong. Please try again.',
+                type: 'danger',
+                buttonText: 'Dismiss'
+            });
+        }
+    };
+
     render() {
         return (
             <Container>
@@ -68,7 +89,7 @@ class PlanScreen extends Component {
                                 </Button>
                             </>
                         ) : (
-                            <Button transparent>
+                            <Button transparent onPress={() => this._joinTrip()}>
                                 <Text>Join</Text>
                             </Button>
                         )}

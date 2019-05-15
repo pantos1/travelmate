@@ -77,7 +77,8 @@ export default class MapScreen extends Component {
         return (
             <View style={styles.container}>
                 <MapView
-                    style={{        position: 'absolute',
+                    style={{
+                        position: 'absolute',
                         top: 0,
                         left: 0,
                         right: 0,
@@ -101,7 +102,7 @@ export default class MapScreen extends Component {
                         this.props.navigation.goBack();
                     }}
                 >
-                    <Text>Select start location</Text>
+                    <Text>Select location</Text>
                 </Button>
             </View>
         );
@@ -117,13 +118,5 @@ const styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'flex-end',
         alignItems: 'center'
-    },
-    map: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        flex: 1
     }
 });
