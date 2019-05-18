@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Form, Input, Item, Text, Toast } from 'native-base';
+import { Button, Container, Content, Form, Input, Item, Text, Toast } from 'native-base';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 import firebase from 'react-native-firebase';
 import { Formik } from 'formik';
@@ -24,7 +24,10 @@ class SignUpScreen extends Component {
     googleSignIn = async () => {
         try {
             await GoogleSignin.configure({
-                scopes: ['https://www.googleapis.com/auth/firebase.readonly', 'https://www.googleapis.com/auth/cloud-platform'],
+                scopes: [
+                    'https://www.googleapis.com/auth/firebase.readonly',
+                    'https://www.googleapis.com/auth/cloud-platform'
+                ],
                 webClientId: '1075849216932-ed2ngjng8btdddspsm8rtjn8n40f2jcu.apps.googleusercontent.com'
             });
 
@@ -53,14 +56,14 @@ class SignUpScreen extends Component {
 
     signUpWithEmail = async ({ email, password, displayName }) => {
         try {
-            this.setState({loading: true});
+            this.setState({ loading: true });
             const credential = await firebase.auth().createUserWithEmailAndPassword(email, password);
             const user = firebase.auth().currentUser;
             await user.updateProfile({ displayName });
-            this.setState({loading: false});
+            this.setState({ loading: false });
         } catch (e) {
             // TODO: Switch based on error codes
-            this.setState({loading: false});
+            this.setState({ loading: false });
             Toast.show({
                 text: 'Error while signing in',
                 type: 'danger',
@@ -72,6 +75,7 @@ class SignUpScreen extends Component {
     render() {
         return (
             <Container>
+                <Content>
                 <Formik
                     initialValues={{
                         email: '',
@@ -142,6 +146,7 @@ class SignUpScreen extends Component {
                 <Button onPress={() => this.props.navigation.navigate('SignIn')} transparent full>
                     <Text uppercase={false}>I already have an account</Text>
                 </Button>
+                </Content>
             </Container>
         );
     }

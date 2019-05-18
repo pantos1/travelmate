@@ -7,6 +7,7 @@ import {
     Container,
     Content,
     Form,
+    H3,
     Header,
     Icon,
     Input,
@@ -21,7 +22,7 @@ import {
 } from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import * as Yup from 'yup';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import firebase, { firestore } from 'react-native-firebase';
 import { currencies } from '../../native-base-theme/data/currencies';
 
@@ -38,7 +39,7 @@ const planValidationSchema = Yup.object().shape({
                     .positive('Duration has to be a positive number')
                     .required('Please enter time to see the place'),
                 price: Yup.number().min(0, 'Price cannot be negative'),
-                currency: Yup.string().required("Please select currency"),
+                currency: Yup.string().required('Please select currency'),
                 latitude: Yup.number().required("Please select trip's start location"),
                 longitude: Yup.number().required("Please select trip's start location")
             })
@@ -184,150 +185,143 @@ class PlanFormScreen extends Component {
                                         <Input disabled={true} />
                                         <ErrorMessage name="latitude" />
                                     </Item>
-                                    <Item>
-                                        <Container>
-                                            <Text>Places</Text>
-                                            {errors.places && typeof errors.places === 'string' && (
-                                                <Text style={styles.errorText}>{errors.places}</Text>
-                                            )}
-                                            <FieldArray
-                                                name="places"
-                                                render={arrayHelpers => (
-                                                    <Container>
-                                                        {values.places && values.places.length > 0
-                                                            ? values.places.map((place, index) => (
-                                                                  <Container key={index}>
-                                                                      <Button
-                                                                          small
-                                                                          rounded
-                                                                          danger
-                                                                          onPress={() => arrayHelpers.remove(index)}
-                                                                          style={styles.deleteButton}
-                                                                      >
-                                                                          <Icon name="delete" type="MaterialIcons" />
-                                                                      </Button>
-                                                                      <Item stackedLabel>
-                                                                          <Label>Name</Label>
-                                                                          <Input
-                                                                              onChangeText={handleChange(
-                                                                                  `places.${index}.name`
-                                                                              )}
-                                                                              value={values.places[index].name}
-                                                                          />
-                                                                          <ErrorMessage name={`places.${index}.name`} />
-                                                                      </Item>
-                                                                      <Item stackedLabel>
-                                                                          <Label>Visit time in hours</Label>
-                                                                          <Input
-                                                                              onChangeText={duration =>
-                                                                                  setFieldValue(
-                                                                                      `places.${index}.duration`,
-                                                                                      this._parseNumber(duration)
-                                                                                  )
-                                                                              }
-                                                                              value={this._parseStringNumber(
-                                                                                  values.places[index].duration
-                                                                              )}
-                                                                              keyboardType="numeric"
-                                                                          />
-                                                                          <ErrorMessage
-                                                                              name={`places.${index}.duration`}
-                                                                          />
-                                                                      </Item>
-                                                                      <Item stackedLabel>
-                                                                          <Label>Price</Label>
-                                                                          <Input
-                                                                              onChangeText={price =>
-                                                                                  setFieldValue(
-                                                                                      `places.${index}.price`,
-                                                                                      this._parseNumber(price)
-                                                                                  )
-                                                                              }
-                                                                              value={this._parseStringNumber(
-                                                                                  values.places[index].price
-                                                                              )}
-                                                                              keyboardType="numeric"
-                                                                          />
-                                                                          <ErrorMessage
-                                                                              name={`places.${index}.price`}
-                                                                          />
-                                                                      </Item>
-                                                                      <Item picker>
-                                                                          <Picker
-                                                                              onValueChange={itemValue =>
-                                                                                  setFieldValue(
-                                                                                      `places.${index}.currency`,
-                                                                                      itemValue
-                                                                                  )
-                                                                              }
-                                                                              selectedValue={
-                                                                                  values.places[index].currency
-                                                                              }
-                                                                              mode="dropdown"
-                                                                          >
-                                                                              {currencies.map(value => (
-                                                                                  <Picker.Item
-                                                                                      label={value}
-                                                                                      value={value}
-                                                                                      key={value}
-                                                                                  />
-                                                                              ))}
-                                                                          </Picker>
-                                                                          <ErrorMessage name={`places.${index}.currency`} />
-                                                                      </Item>
-                                                                      <Item
-                                                                          stackedLabel
-                                                                          onPress={() =>
-                                                                              this.props.navigation.navigate('Map', {
-                                                                                  onLocationSelected: ({
-                                                                                      latitude,
-                                                                                      longitude
-                                                                                  }) => {
-                                                                                      setFieldValue(
-                                                                                          `places.${index}.latitude`,
-                                                                                          latitude
-                                                                                      );
-                                                                                      setFieldValue(
-                                                                                          `places.${index}.longitude`,
-                                                                                          longitude
-                                                                                      );
-                                                                                  }
-                                                                              })
+                                        <View style={styles.placesTitle}>
+                                        <H3>Places</H3>
+                                        {errors.places && typeof errors.places === 'string' && (
+                                            <Text style={styles.errorText}>{errors.places}</Text>
+                                        )}
+                                        </View>
+                                    <FieldArray
+                                        name="places"
+                                        render={arrayHelpers => (
+                                            <>
+                                                {values.places && values.places.length > 0
+                                                    ? values.places.map((place, index) => {
+                                                          return (
+                                                              <View key={index} style={styles.planContainer}>
+                                                                  <Button
+                                                                      small
+                                                                      rounded
+                                                                      danger
+                                                                      onPress={() => arrayHelpers.remove(index)}
+                                                                      style={styles.deleteButton}
+                                                                  >
+                                                                      <Icon name="delete" type="MaterialIcons" />
+                                                                  </Button>
+                                                                  <Item stackedLabel>
+                                                                      <Label>Name</Label>
+                                                                      <Input
+                                                                          onChangeText={handleChange(
+                                                                              `places.${index}.name`
+                                                                          )}
+                                                                          value={values.places[index].name}
+                                                                      />
+                                                                      <ErrorMessage name={`places.${index}.name`} />
+                                                                  </Item>
+                                                                  <Item stackedLabel>
+                                                                      <Label>Visit time in hours</Label>
+                                                                      <Input
+                                                                          onChangeText={duration =>
+                                                                              setFieldValue(
+                                                                                  `places.${index}.duration`,
+                                                                                  this._parseNumber(duration)
+                                                                              )
                                                                           }
+                                                                          value={this._parseStringNumber(
+                                                                              values.places[index].duration
+                                                                          )}
+                                                                          keyboardType="numeric"
+                                                                      />
+                                                                      <ErrorMessage name={`places.${index}.duration`} />
+                                                                  </Item>
+                                                                  <Item stackedLabel>
+                                                                      <Label>Price (optional)</Label>
+                                                                      <Input
+                                                                          onChangeText={price =>
+                                                                              setFieldValue(
+                                                                                  `places.${index}.price`,
+                                                                                  this._parseNumber(price)
+                                                                              )
+                                                                          }
+                                                                          value={this._parseStringNumber(
+                                                                              values.places[index].price
+                                                                          )}
+                                                                          keyboardType="numeric"
+                                                                      />
+                                                                      <ErrorMessage name={`places.${index}.price`} />
+                                                                  </Item>
+                                                                  <Item picker style={styles.picker}>
+                                                                      <Picker
+                                                                          onValueChange={itemValue =>
+                                                                              setFieldValue(
+                                                                                  `places.${index}.currency`,
+                                                                                  itemValue
+                                                                              )
+                                                                          }
+                                                                          selectedValue={values.places[index].currency}
+                                                                          mode="dropdown"
                                                                       >
-                                                                          <Label>Select location</Label>
-                                                                          <Input disabled={true} />
-                                                                          <ErrorMessage
-                                                                              name={`places.${index}.latitude`}
-                                                                          />
-                                                                      </Item>
-                                                                  </Container>
-                                                              ))
-                                                            : null}
-                                                        <Button
-                                                            block
-                                                            light
-                                                            style={styles.blockButton}
-                                                            onPress={() =>
-                                                                arrayHelpers.push({
-                                                                    name: '',
-                                                                    duration: '',
-                                                                    latitude: 0,
-                                                                    longitude: 0,
-                                                                    price: '',
-                                                                    currency: 'USD'
-                                                                })
-                                                            }
-                                                        >
-                                                            <Text> Add new place </Text>
-                                                        </Button>
-                                                    </Container>
-                                                )}
-                                            />
-                                        </Container>
-                                    </Item>
+                                                                          {currencies.map(value => (
+                                                                              <Picker.Item
+                                                                                  label={value}
+                                                                                  value={value}
+                                                                                  key={value}
+                                                                              />
+                                                                          ))}
+                                                                      </Picker>
+                                                                      <ErrorMessage name={`places.${index}.currency`} />
+                                                                  </Item>
+                                                                  <Item
+                                                                      stackedLabel
+                                                                      onPress={() =>
+                                                                          this.props.navigation.navigate('Map', {
+                                                                              onLocationSelected: ({
+                                                                                  latitude,
+                                                                                  longitude
+                                                                              }) => {
+                                                                                  setFieldValue(
+                                                                                      `places.${index}.latitude`,
+                                                                                      latitude
+                                                                                  );
+                                                                                  setFieldValue(
+                                                                                      `places.${index}.longitude`,
+                                                                                      longitude
+                                                                                  );
+                                                                              }
+                                                                          })
+                                                                      }
+                                                                  >
+                                                                      <Label>Select location</Label>
+                                                                      <Input disabled={true} />
+                                                                      <ErrorMessage name={`places.${index}.latitude`} />
+                                                                  </Item>
+                                                              </View>
+                                                          );
+                                                      })
+                                                    : null}
+                                                <Button
+                                                    block
+                                                    light
+                                                    style={styles.blockButton}
+                                                    onPress={() =>
+                                                        arrayHelpers.push({
+                                                            name: '',
+                                                            duration: '',
+                                                            latitude: 0,
+                                                            longitude: 0,
+                                                            price: '',
+                                                            currency: 'USD'
+                                                        })
+                                                    }
+                                                >
+                                                    <Text> Add new place </Text>
+                                                </Button>
+                                            </>
+                                        )}
+                                    />
+                                    <Item />
                                 </Form>
-                                <Button onPress={handleSubmit} full disabled={this.state.loading}>
+                                <Button onPress={handleSubmit} block disabled={this.state.loading} style={styles.submitButton}>
                                     <Text>Submit</Text>
                                 </Button>
                             </>
@@ -353,7 +347,26 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     blockButton: {
-        width: '95%'
+        marginTop: 15,
+        marginLeft: 15,
+        marginRight: 15
+    },
+    planContainer: {
+        width: '95%',
+        alignSelf: 'center'
+    },
+    picker: {
+        marginLeft: 15,
+        marginRight: 2
+    },
+    placesTitle: {
+        marginTop: 5,
+        marginLeft: 15
+    },
+    submitButton: {
+        marginTop: 10,
+        marginLeft: 15,
+        marginRight: 15
     }
 });
 

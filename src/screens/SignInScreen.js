@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Form, Input, Item, Text, Toast } from 'native-base';
+import { Button, Container, Content, Form, Input, Item, Text, Toast } from 'native-base';
 import { Formik } from 'formik';
 import { GoogleSigninButton } from 'react-native-google-signin';
 import * as Yup from 'yup';
@@ -17,11 +17,11 @@ class SignInScreen extends Component {
 
     signInWithEmail = async ({ email, password }) => {
         try {
-            this.setState({loading: true});
+            this.setState({ loading: true });
             const credential = await firebase.auth().signInWithEmailAndPassword(email, password);
-            this.setState({loading: false});
+            this.setState({ loading: false });
         } catch (e) {
-            this.setState({loading: false});
+            this.setState({ loading: false });
             let text;
             switch (e.errorCode) {
                 case 'wrong password':
@@ -45,6 +45,7 @@ class SignInScreen extends Component {
     render() {
         return (
             <Container>
+                <Content>
                 <Formik
                     initialValues={{
                         email: '',
@@ -91,6 +92,7 @@ class SignInScreen extends Component {
                     color={GoogleSigninButton.Color.Auto}
                     size={GoogleSigninButton.Size.Wide}
                 />
+                </Content>
             </Container>
         );
     }

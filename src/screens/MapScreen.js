@@ -28,7 +28,7 @@ export default class MapScreen extends Component {
         };
     }
 
-    _onMapReady = () => this.setState({marginBottom: 0});
+    _onMapReady = () => this.setState({ marginBottom: 0 });
 
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
@@ -84,13 +84,14 @@ export default class MapScreen extends Component {
                         right: 0,
                         bottom: 0,
                         flex: 1,
-                        marginBottom: this.state.marginBottom}}
+                        marginBottom: this.state.marginBottom
+                    }}
                     showsUserLocation={true}
                     showsMyLocationButton={true}
                     showsCompass={true}
                     region={this.state.region}
                     onMapReady={this._onMapReady}
-                    onPress={(e) => this.setState({markerLocation: e.nativeEvent.coordinate})}
+                    onPress={e => this.setState({ markerLocation: e.nativeEvent.coordinate, region: e.nativeEvent.region })}
                 >
                     <Marker coordinate={this.state.markerLocation} />
                 </MapView>

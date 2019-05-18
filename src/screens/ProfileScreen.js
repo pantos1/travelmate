@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Content, Header, Right, Text } from 'native-base';
+import { Body, Button, Container, Content, Header, Left, Right, Text, Title } from 'native-base';
 import firebase from 'react-native-firebase';
 import { GoogleSignin } from 'react-native-google-signin';
 
@@ -17,15 +17,17 @@ class ProfileScreen extends Component {
         return (
             <Container>
                 <Header>
+                    <Left />
+                    <Body>
+                        <Title>Your profile</Title>
+                    </Body>
                     <Right>
                         <Button transparent onPress={() => this._handleLogout()}>
                             <Text>Logout</Text>
                         </Button>
                     </Right>
                 </Header>
-                <Content>
-
-                </Content>
+                <Content />
             </Container>
         );
     }

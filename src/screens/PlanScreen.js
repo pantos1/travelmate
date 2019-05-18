@@ -45,17 +45,17 @@ class PlanScreen extends Component {
         });
     };
 
-    _joinTrip = async() => {
-        try{
+    _joinTrip = async () => {
+        try {
             const plan = await this.planRef.get();
             const planData = plan.data();
-            planData.participants.push({uid: this.state.user.uid, displayName: this.state.user.displayName});
-            await this.planRef.set(planData, {merge: true});
+            planData.participants.push({ uid: this.state.user.uid, displayName: this.state.user.displayName });
+            await this.planRef.set(planData, { merge: true });
             Toast.show({
                 text: 'You have joined the trip!',
                 type: 'success',
                 buttonText: 'Ok'
-            })
+            });
         } catch (e) {
             console.log(e);
             Toast.show({
