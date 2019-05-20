@@ -12,7 +12,6 @@ import MapScreen from './src/screens/MapScreen';
 import { Root, Spinner, StyleProvider } from 'native-base';
 import SignUpScreen from './src/screens/SignUpScreen';
 import firebase from 'react-native-firebase';
-import { GoogleSignin } from 'react-native-google-signin';
 import SignInScreen from './src/screens/SignInScreen';
 import getTheme from './native-base-theme/components';
 import commonColor from './native-base-theme/variables/commonColor';
@@ -38,13 +37,13 @@ export default class App extends Component {
                 this.setState({ user: null, signedIn: false});
             }
         });
-        GoogleSignin.getCurrentUser().then(user => {
-            if (user) {
-                this.setState({ user, signedIn: true });
-            } else {
-                this.setState({ user: null, signedIn: false});
-            }
-        });
+        // GoogleSignin.getCurrentUser().then(user => {
+        //     if (user) {
+        //         this.setState({ user, signedIn: true });
+        //     } else {
+        //         this.setState({ user: null, signedIn: false});
+        //     }
+        // });
         this.setState({ checkedSignIn: true });
     }
 

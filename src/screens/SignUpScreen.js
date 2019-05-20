@@ -5,8 +5,10 @@ import firebase from 'react-native-firebase';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { StyleSheet } from 'react-native';
+import { ErrorMessage } from '../components/ErrorMessage';
 
 const SignUpValidationSchema = Yup.object().shape({
+    displayName: Yup.string().required('Display name is required'),
     email: Yup.string()
         .email('Wrong email format')
         .required('Email is required'),
@@ -30,27 +32,25 @@ class SignUpScreen extends Component {
                 ],
                 webClientId: '1075849216932-ed2ngjng8btdddspsm8rtjn8n40f2jcu.apps.googleusercontent.com'
             });
-
             await GoogleSignin.hasPlayServices();
-
             const data = await GoogleSignin.signIn();
-
-            const credential = firebase.auth().GoogleAuthProvider.credential(data.idToken, data.accessToken);
-
+            const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
             const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
         } catch (e) {
             console.log(e);
             let text;
-            if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                text = 'Play Services are not available';
-            } else {
-                text = 'Error while signing in with Google';
+            if(e.code !== statusCodes.SIGN_IN_CANCELLED) {
+                if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                    text = 'Play Services are not available';
+                } else {
+                    text = 'Error while signing in with Google';
+                }
+                Toast.show({
+                    text: text,
+                    type: 'danger',
+                    buttonText: 'Dismiss'
+                });
             }
-            Toast.show({
-                text: text,
-                type: 'danger',
-                buttonText: 'Dismiss'
-            });
         }
     };
 
@@ -96,7 +96,7 @@ class SignUpScreen extends Component {
                                     value={values.displayName}
                                     placeholder="Name"
                                 />
-                                {errors.displayName && <Text style={styles.errorText}>{errors.displayName}</Text>}
+                                <ErrorMessage name="displayName" />
                             </Item>
                             <Item>
                                 <Input
@@ -106,7 +106,7 @@ class SignUpScreen extends Component {
                                     autoCapitalize="none"
                                     placeholder="Email"
                                 />
-                                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                                <ErrorMessage name="email" />
                             </Item>
                             <Item>
                                 <Input
@@ -116,7 +116,7 @@ class SignUpScreen extends Component {
                                     autoCapitalize="none"
                                     secureTextEntry
                                 />
-                                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                                <ErrorMessage name="password" />
                             </Item>
                             <Item last>
                                 <Input
@@ -126,9 +126,7 @@ class SignUpScreen extends Component {
                                     autoCapitalize="none"
                                     secureTextEntry
                                 />
-                                {errors.passwordConfirmed && (
-                                    <Text style={styles.errorText}>{errors.passwordConfirmed}</Text>
-                                )}
+                                <ErrorMessage name="passwordConfirmed" />
                             </Item>
                             <Button onPress={handleSubmit} disabled={this.state.loading} block>
                                 <Text>Sign Up</Text>
