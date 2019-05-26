@@ -74,7 +74,7 @@ export default class App extends Component {
 
 const HomeStack = createStackNavigator(
     {
-        Home: { screen: PlanListScreen },
+        Home: { screen: PlanListScreen, params: {ownPlans: false} },
         Plan: { screen: PlanScreen },
         PlanForm: { screen: PlanFormScreen },
         Map: { screen: MapScreen }
@@ -95,8 +95,32 @@ HomeStack.navigationOptions = ({ navigation }) => {
     };
 };
 
+const MyTripsStack = createStackNavigator(
+    {
+        Home: { screen: PlanListScreen, params: {ownPlans: true} },
+        Plan: { screen: PlanScreen },
+        PlanForm: { screen: PlanFormScreen },
+        Map: { screen: MapScreen }
+    },
+    {
+        headerMode: 'none'
+    }
+);
+
+MyTripsStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible = true;
+    if (navigation.state.index > 0) {
+        tabBarVisible = false;
+    }
+
+    return {
+        tabBarVisible
+    };
+};
+
 const SignedIn = createBottomTabNavigator({
-    Home: HomeStack,
+    Discover: HomeStack,
+    "My trips": MyTripsStack,
     Profile: ProfileScreen,
 },
     {
@@ -105,10 +129,12 @@ const SignedIn = createBottomTabNavigator({
                 const { routeName } = navigation.state;
                 let IconComponent = Ionicons;
                 let iconName;
-                if (routeName === 'Home') {
-                    iconName = `ios-home`;
+                if (routeName === 'Discover') {
+                    iconName = `ios-compass`;
                 } else if (routeName === 'Profile') {
                     iconName = `ios-person`;
+                } else if(routeName === 'My trips') {
+                    iconName = 'ios-list';
                 }
                 return <IconComponent name={iconName} size={25} color={tintColor} />;
             }

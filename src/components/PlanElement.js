@@ -14,7 +14,11 @@ class PlanElement extends Component {
                     <Text style={styles.title}>{this.props.name}</Text>
                     <View style={styles.rowContainer}>
                         <Icon name="attach-money" type="MaterialIcons" />
-                        {this.props.price ? <Text>{this.props.price} {this.props.currency}</Text> : null}
+                        {this.props.price ? (
+                            <Text>
+                                {this.props.price} {this.props.currency}
+                            </Text>
+                        ) : null}
                     </View>
                     <View style={styles.rowContainer}>
                         <Icon name="timelapse" type="MaterialIcons" />

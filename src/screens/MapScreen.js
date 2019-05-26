@@ -91,7 +91,9 @@ export default class MapScreen extends Component {
                     showsCompass={true}
                     region={this.state.region}
                     onMapReady={this._onMapReady}
-                    onPress={e => this.setState({ markerLocation: e.nativeEvent.coordinate, region: e.nativeEvent.region })}
+                    onPress={e =>
+                        this.setState({ markerLocation: e.nativeEvent.coordinate, region: e.nativeEvent.region })
+                    }
                 >
                     <Marker coordinate={this.state.markerLocation} />
                 </MapView>

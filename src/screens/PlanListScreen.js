@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Body, Container, Fab, Header, Icon, Left, Right, Spinner, Title } from 'native-base';
 import PlanListElement from '../components/PlanListElement';
-import { firestore } from 'react-native-firebase';
+import firebase, { firestore } from 'react-native-firebase';
 
 class PlanListScreen extends Component {
     constructor(props) {
         super(props);
+        this.user = firebase.auth().currentUser;
+        this.ownPlans = this.props.navigation.getParam('ownPlans');
         this.firestoreRef = firestore().collection('trips');
         this.unsubscribe = null;
-
         this.state = {
             loading: true,
             plans: []
@@ -28,11 +29,23 @@ class PlanListScreen extends Component {
         const plans = [];
         querySnapshot.forEach(plan => {
             const planData = plan.data();
-            plans.push({
-                key: plan.id,
-                plan,
-                ...planData
-            });
+            if (this.ownPlans) {
+                if (planData.owner.uid === this.user.uid) {
+                    plans.push({
+                        key: plan.id,
+                        plan,
+                        ...planData
+                    });
+                }
+            } else {
+                if (planData.owner.uid !== this.user.uid) {
+                    plans.push({
+                        key: plan.id,
+                        plan,
+                        ...planData
+                    });
+                }
+            }
         });
         this.setState({
             plans,
@@ -59,9 +72,7 @@ class PlanListScreen extends Component {
             <Container>
                 <Header>
                     <Left />
-                    <Body>
-                        <Title>Discover trips</Title>
-                    </Body>
+                    <Body>{this.ownPlans ? <Title>Your trips</Title> : <Title>Discover trips</Title>}</Body>
                     <Right />
                 </Header>
                 <Container>

@@ -168,6 +168,7 @@ class PlanFormScreen extends Component {
                                     </Item>
                                     <Item
                                         stackedLabel
+                                        value={`${values.latitude} ${values.longitude}`}
                                         onPress={() =>
                                             this.props.navigation.navigate('Map', {
                                                 markerLocation: {
@@ -185,12 +186,12 @@ class PlanFormScreen extends Component {
                                         <Input disabled={true} />
                                         <ErrorMessage name="latitude" />
                                     </Item>
-                                        <View style={styles.placesTitle}>
+                                    <View style={styles.placesTitle}>
                                         <H3>Places</H3>
                                         {errors.places && typeof errors.places === 'string' && (
                                             <Text style={styles.errorText}>{errors.places}</Text>
                                         )}
-                                        </View>
+                                    </View>
                                     <FieldArray
                                         name="places"
                                         render={arrayHelpers => (
@@ -273,6 +274,9 @@ class PlanFormScreen extends Component {
                                                                   </Item>
                                                                   <Item
                                                                       stackedLabel
+                                                                      value={`${values.places.index.latitude} ${
+                                                                          values.places.index.longitude
+                                                                      }`}
                                                                       onPress={() =>
                                                                           this.props.navigation.navigate('Map', {
                                                                               onLocationSelected: ({
@@ -321,7 +325,12 @@ class PlanFormScreen extends Component {
                                     />
                                     <Item />
                                 </Form>
-                                <Button onPress={handleSubmit} block disabled={this.state.loading} style={styles.submitButton}>
+                                <Button
+                                    onPress={handleSubmit}
+                                    block
+                                    disabled={this.state.loading}
+                                    style={styles.submitButton}
+                                >
                                     <Text>Submit</Text>
                                 </Button>
                             </>

@@ -39,7 +39,7 @@ class SignUpScreen extends Component {
         } catch (e) {
             console.log(e);
             let text;
-            if(e.code !== statusCodes.SIGN_IN_CANCELLED) {
+            if (e.code !== statusCodes.SIGN_IN_CANCELLED) {
                 if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
                     text = 'Play Services are not available';
                 } else {
@@ -76,74 +76,74 @@ class SignUpScreen extends Component {
         return (
             <Container>
                 <Content>
-                <Formik
-                    initialValues={{
-                        email: '',
-                        password: '',
-                        passwordConfirmed: '',
-                        displayName: ''
-                    }}
-                    onSubmit={this.signUpWithEmail}
-                    validationSchema={SignUpValidationSchema}
-                    validateOnChange={false}
-                    validateOnBlur={false}
-                >
-                    {({ errors, values, handleChange, handleSubmit }) => (
-                        <Form>
-                            <Item>
-                                <Input
-                                    onChangeText={handleChange('displayName')}
-                                    value={values.displayName}
-                                    placeholder="Name"
-                                />
-                                <ErrorMessage name="displayName" />
-                            </Item>
-                            <Item>
-                                <Input
-                                    onChangeText={handleChange('email')}
-                                    value={values.email}
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                    placeholder="Email"
-                                />
-                                <ErrorMessage name="email" />
-                            </Item>
-                            <Item>
-                                <Input
-                                    onChangeText={handleChange('password')}
-                                    value={values.password}
-                                    placeholder="Password"
-                                    autoCapitalize="none"
-                                    secureTextEntry
-                                />
-                                <ErrorMessage name="password" />
-                            </Item>
-                            <Item last>
-                                <Input
-                                    onChangeText={handleChange('passwordConfirmed')}
-                                    value={values.passwordConfirmed}
-                                    placeholder="Confirm password"
-                                    autoCapitalize="none"
-                                    secureTextEntry
-                                />
-                                <ErrorMessage name="passwordConfirmed" />
-                            </Item>
-                            <Button onPress={handleSubmit} disabled={this.state.loading} block>
-                                <Text>Sign Up</Text>
-                            </Button>
-                        </Form>
-                    )}
-                </Formik>
-                <GoogleSigninButton
-                    style={styles.googleButton}
-                    onPress={this.googleSignIn}
-                    color={GoogleSigninButton.Color.Auto}
-                    size={GoogleSigninButton.Size.Wide}
-                    disabled={this.state.loading}
-                />
-                <Button onPress={() => this.props.navigation.navigate('SignIn')} transparent full>
-                    <Text uppercase={false}>I already have an account</Text>
-                </Button>
+                    <Formik
+                        initialValues={{
+                            email: '',
+                            password: '',
+                            passwordConfirmed: '',
+                            displayName: ''
+                        }}
+                        onSubmit={this.signUpWithEmail}
+                        validationSchema={SignUpValidationSchema}
+                        validateOnChange={false}
+                        validateOnBlur={false}
+                    >
+                        {({ values, handleChange, handleSubmit }) => (
+                            <Form>
+                                <Item>
+                                    <Input
+                                        onChangeText={handleChange('displayName')}
+                                        value={values.displayName}
+                                        placeholder="Name"
+                                    />
+                                    <ErrorMessage name="displayName" />
+                                </Item>
+                                <Item>
+                                    <Input
+                                        onChangeText={handleChange('email')}
+                                        value={values.email}
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                        placeholder="Email"
+                                    />
+                                    <ErrorMessage name="email" />
+                                </Item>
+                                <Item>
+                                    <Input
+                                        onChangeText={handleChange('password')}
+                                        value={values.password}
+                                        placeholder="Password"
+                                        autoCapitalize="none"
+                                        secureTextEntry
+                                    />
+                                    <ErrorMessage name="password" />
+                                </Item>
+                                <Item last>
+                                    <Input
+                                        onChangeText={handleChange('passwordConfirmed')}
+                                        value={values.passwordConfirmed}
+                                        placeholder="Confirm password"
+                                        autoCapitalize="none"
+                                        secureTextEntry
+                                    />
+                                    <ErrorMessage name="passwordConfirmed" />
+                                </Item>
+                                <Button onPress={handleSubmit} disabled={this.state.loading} block>
+                                    <Text>Sign Up</Text>
+                                </Button>
+                            </Form>
+                        )}
+                    </Formik>
+                    <GoogleSigninButton
+                        style={styles.googleButton}
+                        onPress={this.googleSignIn}
+                        color={GoogleSigninButton.Color.Auto}
+                        size={GoogleSigninButton.Size.Wide}
+                        disabled={this.state.loading}
+                    />
+                    <Button onPress={() => this.props.navigation.navigate('SignIn')} transparent full>
+                        <Text uppercase={false}>I already have an account</Text>
+                    </Button>
                 </Content>
             </Container>
         );
