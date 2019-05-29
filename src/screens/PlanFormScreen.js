@@ -168,7 +168,6 @@ class PlanFormScreen extends Component {
                                     </Item>
                                     <Item
                                         stackedLabel
-                                        value={`${values.latitude} ${values.longitude}`}
                                         onPress={() =>
                                             this.props.navigation.navigate('Map', {
                                                 markerLocation: {
@@ -183,7 +182,7 @@ class PlanFormScreen extends Component {
                                         }
                                     >
                                         <Label>Select start location</Label>
-                                        <Input disabled={true} />
+                                        <Input editable={false} value={`${values.latitude} ${values.longitude}`} />
                                         <ErrorMessage name="latitude" />
                                     </Item>
                                     <View style={styles.placesTitle}>
@@ -274,9 +273,6 @@ class PlanFormScreen extends Component {
                                                                   </Item>
                                                                   <Item
                                                                       stackedLabel
-                                                                      value={`${values.places.index.latitude} ${
-                                                                          values.places.index.longitude
-                                                                      }`}
                                                                       onPress={() =>
                                                                           this.props.navigation.navigate('Map', {
                                                                               onLocationSelected: ({
@@ -296,7 +292,12 @@ class PlanFormScreen extends Component {
                                                                       }
                                                                   >
                                                                       <Label>Select location</Label>
-                                                                      <Input disabled={true} />
+                                                                      <Input
+                                                                          editable={false}
+                                                                          value={`${values.places[index].latitude} ${
+                                                                              values.places[index].longitude
+                                                                          }`}
+                                                                      />
                                                                       <ErrorMessage name={`places.${index}.latitude`} />
                                                                   </Item>
                                                               </View>
